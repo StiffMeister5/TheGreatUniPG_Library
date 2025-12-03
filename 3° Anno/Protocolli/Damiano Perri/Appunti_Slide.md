@@ -624,8 +624,6 @@ Essendo valori piccoli il rapporto espresso in dB assume valori estremamente pic
 8. [Modem](#modem)
 9. [Interfacce](#interfacce)
 
-
-
 ## Decibel e EVM
 
 ### Definizione di Bel e Decibel
@@ -1191,7 +1189,7 @@ Lo standard delle tecniche di interfacciamento è deciso dall'**ITU**.
 
 ---
 
-## ADSL 
+## ADSL
 
 (Asymmetrical Digital Subscriber Line)
 Il doppino telefonico possiede una discreta banda, limitata però a soli 4 kHz.
@@ -1311,13 +1309,274 @@ Il doppino telefonico possiede una discreta banda, limitata però a soli 4 kHz.
 - Per PC: schede su bus PCI
 - Connettori: 4 pin o 6 pin
 
+---
+
+# Da qui in poi è da far riformattare a claude <3
+
+---
+
 # PDF_10
 
+#### Interfaccia RS422
+
+Nato per la trasmissione di segnali digitali fino a 10Mbits/s fino a 1200m.
+Questo standard impone che ogni linea differenziale sia pilotata da un driver
+Anche se è più comune l'utilizzo per le connessioni punto a punto , ci possono essere fino a 10 ricevitori.
+
+Gli stati sono rappresentati così:
+
+- quando il terminale A è negativo rispetto a B la linea rappresenta un 1 binario. Tale stato rappresenta anche uno stato di idle
+- quando A è positivio rispetto a B la linea rappresenta uno 0 binario
+  A>B = 0, A<B = 1
+  ![alt text](images/rs422.png)
+
+A e B quindi hanno sempre due valori opposti tra di loro.
+La differenza di potenziale tra A e B deve essere almeno di 4V.
+
+### Reti per la trasmissione dati
+
+- PSTN (Public Switching Telephone Network)
+- ISDN (Integrated Service Digital Network)
+- CATV (Community Antenna Television (negli USA))
+- LAN (Local Area Network)
+- VPN (Virtual Private Network)
+- Wireless Network
+  non sono altro che connessioni fisiche ad una seconda rete, quella degi ISP (internet service provider) che fornisce un punto di accesso ad internet
+
+### Strutture di rete
+
+In italia tutt'ora viene usato per la maggiore il doppino telefonico twisted pair. Sono tratti di cavo con centinaia di doppini connessi a punti per la flessibilità usati per il controllo. I tratti di doppino sono distinti in:
+
+- rete di accesso primaria => tra centrale e armadio, formata da cavi con centinaia di coppie
+- secondaria => tra armadio e distributore, formata da cavi con decine di coppie
+- raccordo cliente o cablaggio verticale => tra distributore e borchia di accesso
+
+#### FTTH, FTTC, FTTB - Fibra ottica
+
+- FTTH => fiber to the home
+  - OLT (optical line termination)
+  - ONU (optical network unit) => intefaccia con terminale, in genere "vicino all'utente"
+  - ONT (optical network termination)
+- FTTC => fiber to the cabinet => poi rame fino alla "casa"
+- FTTB => fiber to the building => fibra fino ad una centralina condominiale con successivo collegamento in rame.
+
+L'utilizzo d FTTH porta a due approcci distinti all'uso della fibra:
+
+- AON (active optical network) => detet anche p2p
+- PON (passive optical network) => assenza di apparati attivi al di fuori delle sedi dove sono collegati OLT ONT o ONU. Usa topologia ad albero
+
+#### Banda larga
+
+##### XDSL
+
+Questo gruppo di sistemi hanno caratteristiche favorevoli per la banda larga come cavi a coppie recenti e circuiti utenti brevi. In italia però come al solito le cose o non le facciamo o le facciamo male, infatti 1/3 della popolazione non ha nel suo comune centrali con termiali DSLAM.
+Il DSLAM multipla miglialia di addessi in un'unica interfaccia ad alta densità verso la rete di trasporto.
+Opera come uno switch network a livello 2 OSI.
+
+##### Televisione Digitale Terrestre Interattiva
+
+C'è lo standard europeo DVB-H che permette a piccoli apparati di ricevere.
+Combina gli standard del video digitale con IP suddividendo i contenuti in paccheti di dati da trasferire su cellulare e leggibile da parte dell'utente.
+
+##### Comunicazioni mobili di 3° e 4° generazione
+
+Tech 3G e 4G
+HSPA, high speed packet access è l'anello successivo della catena costituita da
+
+- GSM (global system for mobile communications)
+- GPRS (general packet radio service)
+- UMTS (uniersal mobile telecommunications system)
+  e' gia presente nel mercato.
+
+##### PDH
+
+Plesiochronous Digital Hierarchy, tecnologia che permetti multuplexing e demu dei canali aggregati. Qui due unità sono sincornizzate ma non perefttamente. Infatti ogni volta che si vuole estrarre da un canale si estrae un elemente della gerarchia per volta.
+La codifica PCM genera flussi da 64kbit/s e si inviano in trame che si ripetono ogni 125ms.
+PDH è il pirmo metodo di multiplazione per trasmettere molti canali isnieme con l'aggiunta di due canali di controllo (32 trame in totale).
+Viene usato un multiplexer TDM. Il multiplexer deve inserire slot aggiuntivi per compensare la differenza di bitrate e rendere sincrono il flusso in entrata al multiplexer ricevente.
+PDH non controlla le prestazioni della rete.
+
+##### SDH
+
+Synchronous Digital Hierarchy nasce per ovviare a problemi di temporizzazione di PDH. E' un protocollo a livello fisico usato per la trasmissione di fonia e dati su fibra e rete elettrica. Aggrega flussi con bitrate diversi e li spedisci tutti insieme.
+
+Questo protocollo prevede che tutti gli elementi di rete siano sincronizzati sullo stesso clock. Permette di raggiungere elevati livelli di qualità con l'invio di informazioni di servizio.
+Viene oggi usata per anelli ottici di accesso con topologia a rete o P2P. Non presenta limiti di distanza e offre una velocita di 140Gb/s.
+Unico limite, l'uso di TDM.
+Per reti con maggior numero di accessi per anello si preferisce l'uso di tecnologie per la multiplazione statica delle risorse, come Gigabit Ethernet.
+SDH oggi si sviluppa in OTN (optical transport network)
+
 # PDF_11
+
+##### SONET
+
+Al livello 3 OSI è responsabile della comunicazione end to end.
+Controlla e gestisce lo stato di una connessione.
+Lien Layer si occupa di multiplazione di diversi path tra due nodi e della protezione ai guasti.
+Section Layer definisce le funzione dei rigeneratori lungo il canale. (Livello 2 OSI)
+Photonic Layer definisce il formato di trasmissione su fibra (Livello 1 OSI).
+
+##### Rete CDN
+
+Rete digitale parallela alla PSTN. Prevvede una rete centrale e multiplazione verso gli utenti.
+I collegamenti diretti numerici permettono collegamenti punto punto o punto multipunto con tecniche digitali.
+Mette a disposizione del cliente un flusso dati della banda desiderata tra due località qualunque del territorio nazionale.
+La tecnica di multiplazione è del tutto trasparente.
+
+##### Rete ISDN
+
+Nasce come evoluzione della rete telefonica.
+Ha come scopo quello di portare un collegamento digitale a tutte le scrivanie senza l'uso di un modem.
+Necessita di apparati specifici installati sia presso la centrale che presso l'utente.
+Il vantaggio è quelllo di avere su un unico numero 3 canali: 2 per fonia/dati detti B e 1 di controllo detto canale D.
+Ci sono due soluzioni:
+
+- BRI (basic rate interface)
+- PRI (primary raet interface). Questa è rivolta ad aziende molto grandi visto che supporta fino a 30 linee multuplate ISDN. L'accesso avviene con un flusso a 2Mbit.
+
+L'accesso usa il protocollo di livello 2 LAPD (link access protocolo channel D)e lavora in ABM (modalità asincrona bilanciata).
+Viene installato presso l'utente una borchia ISDN NT1 con i 3 canali.
+I due canali B possono essere raggruppati e avere un canale da 128Kbps.
+Il segnale in linea è digitale 2B1Q e non necessita di conversioni A/D.
+Usa due dispositivi principali come detto prima
+
+- NT1, ha lo scopo di terminare la linea e di convertire il doppino in un bus denominato S. Quest'ultimo è fatto da 8 fili con connettori RJ45 tipico delle reti LAN ETH 10/100base T.
+- TA (adapter), usato per interfaciare gli oggetti che non possono essere connesi al bus di tipo S direttamente.
+  Il centralino usato per ISDN è denominato ISPBX.
+
+#### Sandard della videocomunicazione
+
+- H.320 => consente la tramissione audio/video su linee digitali ISDN. La trasmissione avviene in digiale indipendentemente dalla velocità di ISDN
+- H.323 => standar edlle sessioni di comunicazine audio, video e dati attraverso reti orientate alla connessine. Non è garantita qualità. Diverse applicazioni di diversi produttori possono così operare senza problemi di compatibilità.
+- H.324 => standard internazionale per comunicazione multimediale su basso bit rate. (PLMN e 3G ed esempio).
+- T.120 => standard delle conferenze dati che fornisce comunicazione in tempo reale tra due o più partecipanti. Comprende funzioni aggiuntive come "una lavagna elettronica", chat, scambio file e condivisione di applicazioni.
+
+## Protocolli del secondo livello ISO-OSI
+
+Il secondo livello, Data Link, si occupa del corretto trasferimento dei dati nella linea trasmissiva strutturando i dati in frames e attuando un controllo di flusso.
+Pur avendo definito interfaccia e linea, rimane da indicare tutte le informazioni che il trasmettitore dovrà inviare al ricevitore.
+Di questo si occupano i protocolli di trasmissione, in particolare quelli al secondo livello.
+Questi rappresentano le regole che DTE, DCE e CPE devono seguire affinchè laa ricezione di dati avvenga correttamente.
+Ci sono due principali categorie.
+
+### Protocolli Asinctroni (o start/stop)
+
+Pirma forma di protocolli per la trasmisione dati.
+Permettono la trasmissione di caratteri singoli senza stabilire l'intervallo tra due caratteri successivi.
+Deve comunque essere definito un bit time di durata.
+Ogni char ha un bit di start, uno di partà e uno o due di stop.
+Può avvenire un errore di framing in caso il bit di stop non corrisponda.
+Tipico pacchetto
+![alt text](images/xmodemAsync.png)
+
+- all'inizio il ricevente invia un segnale di NAK ogni 10 secondi segnalando disponibilità
+- il trasmettitore invia un pacchetto come quello sopra
+  - ASCII 06H ack per ricezione corretta
+  - ASCII NAK, ricezione sbagliata
+- al termine il mittente invia ASCII 04H, EOT
+- il ricevitore riconosce EOT con ACK
+
+### Protocolli Sincroni
+
+Non sono presenti bit di starto o stop, ma caratteri di sincronismo SYN nel particolare per protocolli orientati al carattere oppure sequenze di bit (flags) per protocolli orientati al bit.
+La trama è composta da un numero di bit definiti dal protocollo.
+
+#### BSC
+
+BINARY SYNCRONOUS COMMUNICATIONS si divide in 3 tipi
+
+- 1 => rete dedicata p2p
+- 2 => rete commutata p2p
+- 3 => rete multipunnto
+  Usa i seguenti codici
+- ASCII
+- EBCDIC
+- SBT
+  Vi sono trame di controllo o informative.
+  In caso di p2p il trasmettitore invia caratteri di sincronismo. I DTE possono essere sia trasmettitori che riceventi. In caso vi sia una contesa uno dei due diventa una stazione primaria che ripete l'invio mentre l'altro diventa secondaria.
+  Il segnale di ricezione si risponde con ACK oppure NAK e si termina con EOT.
+
+Nel caso di BSC3 multipunto viene fatta un'interrogazione ciclica per individuare il terminale a cui collegarsi.
+
+#### HDLC
+
+High Level Data Link Control, protocollo orientato ai bit per grandi reti.
+E' un protocollo standar ISO per trasmissioni sincrone full duplex.
+I formati sono fissi definiti in frames o trame.
+Si può avere una connessione:
+
+- bilanciata => tra dua stazioone paritetiche
+- sbilanciata => una stazion primaria, più secondarie. Half Duplex con un master.
+  Si ha in 3 modalità:
+- NRM (Normal Response mode) => sbilanciarta half duplex
+- ABM (Async Balanced Mode) => unica modalità prevista da LAPB (B channel). Bilanciata full duplex
+- ARM (Async Response Mode) => simile a NRM ma limitata a due stazioni
+
+![alt text](images/tramaHDLC.png)
+
+- Flag => 8 bit, stabilisce la sincronizzazione, trasmesso continuamente in linea idle. Si fa bit stuffing.
+- Indirizzo => 8 bit estendibile come LLC. Non india protocollo a livello di rete ma altre infor
+- Controllo => campo 8 bit estendibile che identifica il tipo di trama.
+- Campo informativo => contiene il pacchhetto dati fornito al livello OSI 3. Non esistono limiti per l'ampiezza di questo campo.
+- FCSs => frame check sequence, di ridondanza, da almeno 16bit.
+
+I principali valori del campo di controllo in HDLC sono:
+
+- I-frame per dati + numeri di sequenza.
+- S-frame per controllo, ack e richieste
+- U-frame per setup, gestione link, comandi specialie
+
+Non ho voglia per ora di segnarmi tutti i singoli valori del, campo, bastano queste info qui dai...
 
 # Secondo Modulo
 
 # PDF_1
+
+## TCP/IP
+
+### IP address
+
+Su 32 bit identifica univocamente in rete uno specifico host della rete
+Si divide in 2 parti, host e rete.
+Ci sono 4 tipi di classi di IP address.
+
+![alt text](images/classiIP.png)
+
+#### Indirizzi riservati
+
+![alt text](images/indirizziRiservati.png)
+
+> !Gli indirizzi vengono assegnati alle intrfacce non agli host!
+
+#### Sottoreti
+
+Un IP addresso può essere localmente modificato usando parzialmente i bit relativi agli host come bit di indirizzo per sottoreti.
+Si applica una subnet mask.
+
+- se un bit su una subnet mask è a 1, l'equivalente indirizzo IP è interpretato come un network bit, cioè appartiene ad un indirizzo di rete
+- se è a 0, il relativo bit fa parte di un indirizzo di host
+
+![alt text](images/subnetMask.png)
+
+![alt text](images/sottoretiS.png)
+
+### Tabella di routing
+I gateway instradano i dati tra diverse reti.
+Gil host prendono decisioni di instradamento ne seguente modo:
+  - se l'host di destinazione sta sulla rete locale viene mandato direttamente 
+  - se l'host è remoto, i dati vengono mandati ad un gateay locale
+
+L'analisi dell'indirizzo ip fatta dall'host
+  - determina il tipo di classe
+  - controlla la rete di destinazione
+  - cerca la rete nella routing table
+  - instrada i pacchetti di dati seguendo la tabella di routing
+
+> netstat -nr fa vedere la tabella di routing
+
+![alt text](images/routingTable.png)
+
+![alt text](images/schemaRouting.png)
 
 # PDF_2
 
