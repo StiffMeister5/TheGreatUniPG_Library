@@ -1309,283 +1309,892 @@ Il doppino telefonico possiede una discreta banda, limitata però a soli 4 kHz.
 - Per PC: schede su bus PCI
 - Connettori: 4 pin o 6 pin
 
+# Appunti di Reti - Moduli 1 e 2
+
+## MODULO 1
+
+### Interfaccia RS422
+
+Standard nato per la trasmissione di segnali digitali fino a 10 Mbits/s su distanze fino a 1200m.
+
+**Caratteristiche principali:**
+- Ogni linea differenziale è pilotata da un driver dedicato
+- Utilizzo comune per connessioni punto a punto
+- Supporto fino a 10 ricevitori per linea
+
+**Stati logici:**
+- **Stato logico 1 (idle)**: terminale A negativo rispetto a B (A < B)
+- **Stato logico 0**: terminale A positivo rispetto a B (A > B)
+- La differenza di potenziale tra A e B deve essere almeno 4V
+- I terminali A e B hanno sempre valori opposti tra loro
+
+### Reti per la Trasmissione Dati
+
+**Tipologie principali:**
+- **PSTN** (Public Switching Telephone Network)
+- **ISDN** (Integrated Service Digital Network)
+- **CATV** (Community Antenna Television)
+- **LAN** (Local Area Network)
+- **VPN** (Virtual Private Network)
+- **Wireless Network**
+
+Queste rappresentano connessioni fisiche a reti di ISP (Internet Service Provider) che forniscono accesso a Internet.
+
+### Strutture di Rete in Italia
+
+**Doppino telefonico (Twisted Pair):**
+
+La rete italiana si basa prevalentemente su doppini telefonici organizzati in tre livelli:
+
+1. **Rete di accesso primaria**: tra centrale e armadio stradale
+   - Composta da cavi con centinaia di coppie
+
+2. **Rete secondaria**: tra armadio e distributore
+   - Composta da cavi con decine di coppie
+
+3. **Raccordo cliente (cablaggio verticale)**: tra distributore e borchia di accesso
+   - Ultimo miglio verso l'utente finale
+
+### Tecnologie in Fibra Ottica
+
+**FTTH (Fiber To The Home):**
+- **OLT** (Optical Line Termination): terminazione in centrale
+- **ONU** (Optical Network Unit): interfaccia con il terminale utente
+- **ONT** (Optical Network Termination): terminazione ottica presso l'utente
+
+**FTTC (Fiber To The Cabinet):**
+- Fibra fino all'armadio stradale
+- Ultimo tratto in rame fino all'abitazione
+
+**FTTB (Fiber To The Building):**
+- Fibra fino alla centralina condominiale
+- Collegamento finale in rame
+
+**Architetture di rete in fibra:**
+- **AON** (Active Optical Network): detta anche P2P (Point-to-Point)
+  - Presenza di apparati attivi lungo il percorso
+  
+- **PON** (Passive Optical Network):
+  - Assenza di apparati attivi tra OLT e ONT/ONU
+  - Utilizza topologia ad albero
+  - Maggiore efficienza energetica
+
+### Tecnologie Banda Larga
+
+#### xDSL
+
+**Caratteristiche:**
+- Sfrutta cavi a coppie recenti e circuiti utente brevi
+- In Italia circa 1/3 della popolazione non ha accesso a centrali DSLAM nel proprio comune
+
+**DSLAM** (Digital Subscriber Line Access Multiplexer):
+- Multiplexa migliaia di accessi DSL
+- Fornisce un'unica interfaccia ad alta densità verso la rete di trasporto
+- Opera come switch di rete a livello 2 OSI
+
+#### Televisione Digitale Terrestre Interattiva (DVB-H)
+
+**Standard europeo DVB-H:**
+- Permette ricezione su dispositivi portatili
+- Combina standard video digitale con protocollo IP
+- Suddivide contenuti in pacchetti dati trasferibili su rete cellulare
+
+#### Comunicazioni Mobili 3G e 4G
+
+**Evoluzione delle tecnologie:**
+1. **GSM** (Global System for Mobile Communications)
+2. **GPRS** (General Packet Radio Service)
+3. **UMTS** (Universal Mobile Telecommunications System)
+4. **HSPA** (High Speed Packet Access) - tecnologia 3G avanzata
+
+### PDH (Plesiochronous Digital Hierarchy)
+
+**Caratteristiche:**
+- Tecnologia per multiplexing e demultiplexing di canali aggregati
+- Le unità sono sincronizzate ma non perfettamente
+- Per estrarre un singolo canale è necessario estrarre un elemento della gerarchia per volta
+
+**Funzionamento:**
+- Codifica PCM genera flussi da 64 kbit/s
+- Trame ripetute ogni 125 μs
+- Primo metodo di multiplazione con 32 canali (30 dati + 2 controllo)
+- Utilizza multiplexer TDM (Time Division Multiplexing)
+- Il multiplexer inserisce slot aggiuntivi per compensare differenze di bitrate
+- **Limitazione**: non controlla le prestazioni della rete
+
+### SDH (Synchronous Digital Hierarchy)
+
+**Vantaggi rispetto a PDH:**
+- Risolve i problemi di temporizzazione di PDH
+- Protocollo a livello fisico per trasmissione su fibra e rete elettrica
+- Tutti gli elementi di rete sincronizzati sullo stesso clock
+- Aggrega flussi con bitrate diversi
+
+**Caratteristiche tecniche:**
+- Permette elevati livelli di qualità tramite informazioni di servizio
+- Utilizzata per anelli ottici di accesso (topologia a rete o P2P)
+- Nessun limite di distanza
+- Velocità fino a 140 Gbit/s
+- **Limitazione**: utilizza TDM
+
+**Evoluzione:**
+- Per reti con maggior numero di accessi si preferisce Gigabit Ethernet
+- SDH evolve in OTN (Optical Transport Network)
+
+### SONET (Synchronous Optical Network)
+
+**Architettura a livelli:**
+
+1. **Path Layer** (Livello 3 OSI):
+   - Responsabile della comunicazione end-to-end
+   - Controlla e gestisce lo stato delle connessioni
+
+2. **Line Layer** (Livello 2 OSI):
+   - Multiplexing di diversi path tra due nodi
+   - Protezione ai guasti
+
+3. **Section Layer** (Livello 2 OSI):
+   - Definisce funzioni dei rigeneratori lungo il canale
+
+4. **Photonic Layer** (Livello 1 OSI):
+   - Definisce formato di trasmissione su fibra
+
+### Rete CDN (Circuit Data Network)
+
+**Caratteristiche:**
+- Rete digitale parallela alla PSTN
+- Rete centrale con multiplazione verso gli utenti
+- Collegamenti numerici punto-punto o punto-multipunto
+- Mette a disposizione un flusso dati della banda desiderata tra due località qualunque del territorio nazionale
+- Tecnica di multiplazione trasparente all'utente
+
+### Rete ISDN (Integrated Services Digital Network)
+
+**Obiettivi:**
+- Evoluzione della rete telefonica tradizionale
+- Collegamento digitale end-to-end senza modem
+- Richiede apparati specifici presso centrale e utente
+
+**Struttura canali:**
+- **2 canali B**: per fonia/dati (64 kbit/s ciascuno)
+- **1 canale D**: di controllo e segnalazione (16 kbit/s)
+- Possibilità di raggruppare i due canali B per ottenere 128 kbit/s
+
+**Soluzioni di accesso:**
+
+1. **BRI** (Basic Rate Interface):
+   - Per utenti residenziali e piccole aziende
+   - 2B+D (144 kbit/s totali)
+
+2. **PRI** (Primary Rate Interface):
+   - Per grandi aziende
+   - Supporta fino a 30 linee multiplexate
+   - Accesso a 2 Mbit/s
+   - 30B+D
+
+**Componenti hardware:**
+
+- **NT1** (Network Termination 1):
+  - Termina la linea ISDN
+  - Converte il doppino in bus S (8 fili, connettori RJ45)
+  - Bus S compatibile con LAN Ethernet 10/100baseT
+
+- **TA** (Terminal Adapter):
+  - Interfaccia dispositivi non nativamente compatibili con bus S
+  - Conversione per apparecchi analogici
+
+- **ISPBX**: centralino telefonico per ISDN
+
+**Protocolli:**
+- **LAPD** (Link Access Protocol channel D): protocollo di livello 2
+- Modalità **ABM** (Asynchronous Balanced Mode)
+- Segnale in linea digitale **2B1Q** (no conversione A/D necessaria)
+
+### Standard di Videocomunicazione
+
+#### H.320
+- Trasmissione audio/video su linee digitali ISDN
+- Trasmissione digitale indipendente dalla velocità ISDN
+
+#### H.323
+- Standard per sessioni audio, video e dati su reti packet-switched
+- Non garantisce QoS (Quality of Service)
+- Interoperabilità tra applicazioni di produttori diversi
+
+#### H.324
+- Comunicazione multimediale su linee a basso bitrate
+- Per reti PLMN (Public Land Mobile Network) e 3G
+
+#### T.120
+- Standard per conferenze dati
+- Comunicazione real-time tra più partecipanti
+- Funzioni aggiuntive:
+  - Lavagna elettronica condivisa
+  - Chat testuale
+  - Scambio file
+  - Condivisione applicazioni
+
+---
+
+## Protocolli di Livello 2 ISO-OSI (Data Link)
+
+Il livello Data Link gestisce il trasferimento corretto dei dati sulla linea trasmissiva, strutturando i dati in frame e implementando controllo di flusso ed errori.
+
+I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seguire per garantire la corretta ricezione dei dati.
+
+### Protocolli Asincroni (Start/Stop)
+
+**Caratteristiche:**
+- Prima forma di protocollo per trasmissione dati
+- Trasmissione di caratteri singoli
+- Intervallo variabile tra caratteri successivi
+- Bit time di durata definita
+
+**Struttura frame:**
+- 1 bit di start
+- n bit di dati (tipicamente 7-8)
+- 1 bit di parità (opzionale)
+- 1-2 bit di stop
+
+**Gestione errori:**
+- Errore di framing se il bit di stop non corrisponde
+- Protocollo XMODEM tipico esempio
+
+**Protocollo XMODEM:**
+1. Ricevente invia **NAK** ogni 10 secondi per segnalare disponibilità
+2. Trasmettitore invia pacchetto dati
+3. Ricevente risponde:
+   - **ACK** (ASCII 06H): ricezione corretta
+   - **NAK**: ricezione errata, ritrasmissione
+4. A termine il mittente invia **EOT** (ASCII 04H)
+5. Ricevitore conferma EOT con ACK finale
+
+### Protocolli Sincroni
+
+**Differenze rispetto agli asincroni:**
+- Assenza di bit di start/stop
+- Sincronizzazione tramite:
+  - Caratteri SYN (protocolli orientati al carattere)
+  - Sequenze di bit flag (protocolli orientati al bit)
+- Trama con numero di bit definito dal protocollo
+
+#### BSC (Binary Synchronous Communications)
+
+**Tre modalità operative:**
+1. Rete dedicata punto-punto
+2. Rete commutata punto-punto
+3. Rete multipunto
+
+**Codifiche supportate:**
+- ASCII
+- EBCDIC
+- SBT (Six-Bit Transcode)
+
+**Tipi di trame:**
+- Trame di controllo
+- Trame informative
+
+**Funzionamento punto-punto:**
+- Trasmettitore invia caratteri di sincronismo (SYN)
+- Entrambi i DTE possono essere trasmettitori o ricevitori
+- In caso di contesa:
+  - Un DTE diventa stazione primaria (ripete invio)
+  - L'altro diventa stazione secondaria
+- Risposta con ACK (successo) o NAK (errore)
+- Terminazione con EOT
+
+**Funzionamento multipunto (BSC3):**
+- Interrogazione ciclica (polling) per individuare terminale destinatario
+- Stazione primaria gestisce le comunicazioni
+
+#### HDLC (High-Level Data Link Control)
+
+**Caratteristiche generali:**
+- Protocollo orientato ai bit
+- Standard ISO per trasmissioni sincrone full-duplex
+- Formati fissi definiti in frame/trame
+- Utilizzato per grandi reti
+
+**Tipi di connessione:**
+
+1. **Bilanciata**: tra due stazioni paritarie
+2. **Sbilanciata**: una primaria, più secondarie (half-duplex)
+
+**Modalità operative:**
+
+1. **NRM** (Normal Response Mode):
+   - Sbilanciata, half-duplex
+   - Stazione secondaria trasmette solo su permesso
+
+2. **ABM** (Asynchronous Balanced Mode):
+   - Unica modalità LAPB (canale B)
+   - Bilanciata, full-duplex
+   - Entrambe le stazioni possono iniziare trasmissione
+
+3. **ARM** (Asynchronous Response Mode):
+   - Simile a NRM ma limitata a due stazioni
+   - Stazione secondaria può iniziare trasmissione
+
+**Struttura frame HDLC:**
+
+```
++------+----------+----------+---------------+------+
+| Flag | Indirizzo| Controllo| Informazione | FCS  | Flag |
+| 8bit |  8bit+   |  8bit+   |   variabile  | 16bit+ | 8bit |
++------+----------+----------+---------------+------+
+```
+
+**Campi del frame:**
+
+1. **Flag** (01111110):
+   - Delimitatore di inizio/fine frame
+   - Trasmesso continuamente in linea idle
+   - Utilizza bit stuffing per trasparenza
+
+2. **Indirizzo** (8 bit, estendibile):
+   - Non indica protocollo di livello rete
+   - Contiene altre informazioni di controllo
+
+3. **Controllo** (8 bit, estendibile):
+   - Identifica tipo di trama
+
+4. **Campo informativo**:
+   - Contiene pacchetto dati da livello OSI 3
+   - Nessun limite teorico di ampiezza
+
+5. **FCS** (Frame Check Sequence):
+   - Campo di ridondanza ciclica
+   - Minimo 16 bit (tipicamente CRC-16 o CRC-32)
+
+**Tipi di frame:**
+
+1. **I-frame** (Information):
+   - Trasporto dati utente
+   - Contiene numeri di sequenza per controllo flusso
+
+2. **S-frame** (Supervisory):
+   - Controllo flusso
+   - ACK e richieste di ritrasmissione
+   - Non contiene campo informativo
+
+3. **U-frame** (Unnumbered):
+   - Setup e gestione del link
+   - Comandi speciali di controllo
+   - Modalità operative
+
+---
+
+## MODULO 2 - TCP/IP
+
+### Indirizzamento IP
+
+**Struttura IP address:**
+- 32 bit (IPv4)
+- Identifica univocamente un host in rete
+- Suddiviso in due parti:
+  - **Network ID**: identifica la rete
+  - **Host ID**: identifica l'host nella rete
+
+> **Importante**: Gli indirizzi vengono assegnati alle interfacce, non agli host!
+
+### Classi di Indirizzi IP
+
+**Classe A:**
+- Primo bit: 0
+- Range: 1.0.0.0 - 126.255.255.255
+- Subnet mask: 255.0.0.0 (/8)
+- Reti: 126
+- Host per rete: 16.777.214
+
+**Classe B:**
+- Primi due bit: 10
+- Range: 128.0.0.0 - 191.255.255.255
+- Subnet mask: 255.255.0.0 (/16)
+- Reti: 16.384
+- Host per rete: 65.534
+
+**Classe C:**
+- Primi tre bit: 110
+- Range: 192.0.0.0 - 223.255.255.255
+- Subnet mask: 255.255.255.0 (/24)
+- Reti: 2.097.152
+- Host per rete: 254
+
+**Classe D:**
+- Primi quattro bit: 1110
+- Range: 224.0.0.0 - 239.255.255.255
+- Utilizzo: multicast
+
+**Classe E:**
+- Primi quattro bit: 1111
+- Range: 240.0.0.0 - 255.255.255.255
+- Riservata per uso sperimentale
+
+### Indirizzi IP Riservati
+
+**Indirizzi privati (RFC 1918):**
+- Classe A: 10.0.0.0/8
+- Classe B: 172.16.0.0/12 (172.16.0.0 - 172.31.255.255)
+- Classe C: 192.168.0.0/16
+
+**Altri indirizzi speciali:**
+- **127.0.0.0/8**: loopback (127.0.0.1)
+- **0.0.0.0**: indirizzo non specificato
+- **255.255.255.255**: broadcast limitato
+- **Network address**: tutti bit host a 0
+- **Broadcast address**: tutti bit host a 1
+
+### Subnetting
+
+**Subnet Mask:**
+- Permette di suddividere una rete in sottoreti
+- Utilizza parte dei bit host come bit di rete
+
+**Regole:**
+- Bit a **1**: parte dell'indirizzo di rete
+- Bit a **0**: parte dell'indirizzo host
+
+**Esempio pratico:**
+```
+IP: 192.168.1.130
+Subnet mask: 255.255.255.192 (/26)
+
+Network: 192.168.1.128
+Primo host: 192.168.1.129
+Ultimo host: 192.168.1.190
+Broadcast: 192.168.1.191
+Host disponibili: 62
+```
+
+### Routing e Tabella di Routing
+
+**Routing:**
+I gateway instradano dati tra reti diverse.
+
+**Decisioni di instradamento dell'host:**
+1. Se destinazione è sulla rete locale → invio diretto
+2. Se destinazione è remota → invio a gateway locale
+
+**Processo di analisi indirizzo IP:**
+1. Determina classe dell'indirizzo
+2. Estrae network ID di destinazione
+3. Cerca rete nella routing table
+4. Instrada pacchetti secondo la tabella
+
+**Visualizzare routing table:**
+```bash
+netstat -nr
+```
+
+**Struttura routing table:**
+- **Destination**: rete di destinazione
+- **Gateway**: gateway da utilizzare
+- **Genmask**: subnet mask
+- **Flags**: stato della route (U=Up, G=Gateway, H=Host)
+- **Iface**: interfaccia di uscita
+
+**Route flags comuni:**
+- **U**: route attiva (Up)
+- **G**: route utilizza gateway
+- **H**: route verso host specifico
+- **D**: route creata dinamicamente
+- **M**: route modificata dinamicamente
+
+### ARP (Address Resolution Protocol)
+
+**Funzione:**
+Risoluzione dinamica indirizzi IP in indirizzi fisici (MAC address)
+
+**Funzionamento:**
+1. Host A necessita MAC address di Host B
+2. Host A invia richiesta ARP in broadcast sulla LAN
+3. Host B risponde con il proprio MAC address
+4. Host A memorizza associazione in cache ARP
+
+**Cache ARP:**
+- Ogni macchina mantiene una cache ARP
+- Memorizza associazioni IP-MAC temporanee
+- Riduce traffico di rete
+
+**Visualizzare cache ARP:**
+```bash
+arp -a
+```
+
+### RARP (Reverse ARP)
+
+**Utilizzo:**
+- Per workstation diskless
+- Per dispositivi senza storage locale
+
+**Funzionamento:**
+1. Workstation conosce solo il proprio MAC address
+2. Invia richiesta RARP broadcast
+3. Server RARP risponde con IP address assegnato
+4. Workstation può caricare SO e configurazione
+
+### Numeri di Protocollo
+
+**Definizione:**
+- Byte nel datagram header IP
+- Identifica protocollo del livello superiore
+
+**File di configurazione:**
+```bash
+cat /etc/protocols
+```
+
+**Protocolli comuni:**
+- **1**: ICMP
+- **6**: TCP
+- **17**: UDP
+- **89**: OSPF
+
+### Numeri di Porta
+
+**Caratteristiche:**
+- 16 bit (0-65535)
+- Identificano processi/servizi su un host
+
+**Tipi di porte:**
+1. **Well-known ports** (0-1023):
+   - Servizi standard
+   - Richiedono privilegi root
+
+2. **Registered ports** (1024-49151):
+   - Servizi registrati IANA
+
+3. **Dynamic/Private ports** (49152-65535):
+   - Assegnazione dinamica
+
+**Porte nel TCP segment:**
+- **Source port**: porta sorgente
+- **Destination port**: porta destinazione
+
+**Visualizzare porte:**
+```bash
+cat /etc/services
+```
+
+**Porte comuni:**
+- **20/21**: FTP (dati/controllo)
+- **22**: SSH
+- **23**: Telnet
+- **25**: SMTP
+- **53**: DNS
+- **80**: HTTP
+- **110**: POP3
+- **143**: IMAP
+- **443**: HTTPS
+
+### Struttura Frame di Rete
+
+**Incapsulamento:**
+```
+[Frame Ethernet]
+  [Datagram IP]
+    [Segmento TCP/UDP]
+      [Dati Applicazione]
+```
+
+**Frame Ethernet:**
+- Preamble (7 byte)
+- SFD (1 byte)
+- MAC destinazione (6 byte)
+- MAC sorgente (6 byte)
+- Type/Length (2 byte)
+- Dati (46-1500 byte)
+- FCS (4 byte)
+
+---
+
+## Name Service (Servizi di Risoluzione Nomi)
+
+### Funzione
+Associa nomi simbolici (hostname) agli indirizzi IP delle interfacce di rete.
+
+**Caratteristiche:**
+- Nomi e IP sono generalmente intercambiabili
+- Il sistema converte automaticamente hostname → IP
+- Necessaria traduzione nota a tutti gli host della rete
+
+### Host Table
+
+**File di configurazione:**
+```bash
+/etc/hosts
+```
+
+**Caratteristiche:**
+- Tabella statica locale
+- Formato: `IP_address hostname [alias...]`
+- Utilizzata come fallback se DNS non disponibile
+- Utile per host critici locali
+
+**Esempio:**
+```
+127.0.0.1       localhost
+192.168.1.1     router gateway
+192.168.1.10    server1 srv1
+```
+
+**NIC Host Table:**
+- Registro centralizzato degli host registrati
+- Scaricabile via FTP da NIC
+- Ormai obsoleta per reti grandi
+
+### DNS (Domain Name System)
+
+**Caratteristiche:**
+- Sistema di database distribuiti
+- Architettura gerarchica
+- Aggiornamento automatico della rete
+- Scalabile per reti di qualsiasi dimensione
+
+**Funzionamento:**
+1. Client invia query DNS al server locale
+2. Se il server non ha l'informazione:
+   - Inoltra query al server autoritativo
+   - Server autoritativo risponde
+3. Server locale memorizza risposta in cache
+4. Risposta inviata al client
+
+**Componenti DNS (BIND - Berkeley Internet Name Domain):**
+
+1. **Resolver**:
+   - Gestisce le query DNS
+   - Componente client
+   - Libreria utilizzata dalle applicazioni
+
+2. **Name Server**:
+   - Gestisce le risposte
+   - Componente server
+   - Mantiene database DNS
+
+**Tipi di Name Server:**
+
+1. **Primary Server (Master)**:
+   - Fonte autoritativa per un dominio
+   - Carica dati da file di zona locali
+   - Autorità primaria per il dominio
+
+2. **Secondary Server (Slave)**:
+   - Backup del primary server
+   - Trasferisce intero database dal primary (zone transfer)
+   - Fornisce ridondanza e load balancing
+
+3. **Caching-only Server**:
+   - Non autoritativo per alcun dominio
+   - Memorizza risposte da altri server
+   - Riduce carico di rete e tempo di risposta
+
+**Gerarchia DNS:**
+```
+.                    (root)
+├── com
+│   └── example.com
+├── org
+├── net
+└── it
+    └── dominio.it
+```
+
+---
+
+## Configurazione TCP/IP
+
+### Parametri Essenziali
+
+Per configurare correttamente un host TCP/IP sono necessari:
+
+1. **IP Address**: indirizzo univoco dell'interfaccia
+2. **Hostname**: nome simbolico dell'host
+3. **Default Gateway Address**: router di default
+4. **Subnet Mask**: maschera di sottorete
+5. **Domain Name**: dominio DNS di appartenenza
+6. **Name Server Address**: indirizzi server DNS
+7. **Broadcast Address**: indirizzo di broadcast
+8. **Routing Protocol**: protocollo di routing (se necessario)
+
+### Assegnazione Indirizzi IP
+
+**Autorità di assegnazione:**
+- **NIC** (Network Information Center) - storicamente
+- **RIPE** (Réseaux IP Européens) - per Europa
+- **IANA/ICANN** - coordinamento globale
+
+**Strategie di assegnazione:**
+1. **Sequenziale**: indirizzi consecutivi agli host
+2. **A blocchi**: blocchi di indirizzi per sottoreti
+   - Delega gestione a amministratori di sottorete
+   - Maggiore flessibilità organizzativa
+
+### Configurazione del Routing
+
+**Tre approcci principali:**
+
+#### 1. Routing Minimale
+- Nessuna configurazione di routing necessaria
+- Host connesso a una sola rete
+- Nessun gateway configurato
+- Comunicazione solo sulla rete locale
+
+**Caso d'uso:**
+- Workstation in rete isolata
+- Dispositivi IoT su VLAN dedicata
+
+#### 2. Routing Statico
+- Tabelle di routing configurate manualmente
+- Costruite dall'amministratore di rete
+- Route non cambiano automaticamente
+
+**Vantaggi:**
+- Controllo totale sul percorso dati
+- Predicibilità del traffico
+- Minimo overhead
+
+**Svantaggi:**
+- Manutenzione manuale richiesta
+- Non si adatta a cambiamenti di topologia
+- Scalabilità limitata
+
+**Caso d'uso:**
+- Reti piccole e stabili
+- Connessioni punto-punto critiche
+
+#### 3. Routing Dinamico
+- Tabelle di routing costruite automaticamente
+- Utilizzo di protocolli di routing
+- Adattamento automatico a cambiamenti di rete
+
+**Protocolli comuni:**
+- **RIP** (Routing Information Protocol)
+- **OSPF** (Open Shortest Path First)
+- **BGP** (Border Gateway Protocol)
+
+**Vantaggi:**
+- Adattamento automatico a guasti
+- Scalabilità eccellente
+- Bilanciamento del carico
+
+**Svantaggi:**
+- Overhead di protocollo
+- Complessità configurazione iniziale
+- Convergenza può richiedere tempo
+
+### Scelta del Tipo di Routing
+
+**Fattori da considerare:**
+
+1. **Rete senza gateway**:
+   - Routing minimale
+   - Tutti gli host sulla stessa rete
+
+2. **Rete con un solo gateway**:
+   - Routing statico con default gateway
+   - Configurazione semplice
+
+3. **Rete con più gateway interni e uno esterno**:
+   - Routing statico per sottoreti
+   - Default gateway per traffico esterno
+
+4. **Rete con molti gateway esterni**:
+   - Routing dinamico necessario
+   - Protocolli come OSPF o BGP
+
+### Definizione delle Sottoreti
+
+#### Motivazioni Topologiche
+
+**1. Superamento limiti di distanza:**
+- Componenti hardware hanno limiti fisici
+- Router IP estendono la portata della rete
+- Rigenerazione del segnale
+
+**Esempio:**
+- Ethernet 10Base2: max 185m per segmento
+- Router permettono connessione tra edifici
+
+**2. Connessione reti fisiche diverse:**
+- Router IP collegano tecnologie diverse
+- Ethernet ↔ Wi-Fi
+- LAN ↔ WAN
+
+**3. Filtro del traffico:**
+- Traffico locale rimane nella sottorete locale
+- Riduzione congestione rete
+- Miglioramento prestazioni complessive
+
+**Vantaggi:**
+- Broadcast confinati alla sottorete
+- Minor collisioni (in reti shared medium)
+- Banda disponibile maggiore per host
+
+#### Motivazioni Organizzative
+
+**1. Struttura organizzativa:**
+- Sottoreti per dipartimenti/settori
+- Esempio: sottorete per IT, una per vendite, una per produzione
+
+**2. Delegazione amministrativa:**
+- Amministratori locali per ogni sottorete
+- Responsabilità distribuite
+- Gestione decentralizzata
+
+**3. Isolamento del traffico (sicurezza):**
+- Separazione rete produzione da rete ospiti
+- VLAN per dati sensibili
+- Controllo accessi tra sottoreti
+
+**Implementazione:**
+- Firewall tra sottoreti
+- ACL (Access Control List) sui router
+- Segmentazione fisica o logica (VLAN)
+
+**4. Isolamento problemi potenziali:**
+- Rete di test separata
+- Ambiente di sviluppo isolato
+- Sperimentazioni senza impatto su produzione
+
+**Vantaggi:**
+- Guasti confinati a una sottorete
+- Test senza rischi per produzione
+- Facilità di troubleshooting
+
+### Best Practices Configurazione
+
+**Documentazione:**
+- Piano di indirizzamento IP completo
+- Diagramma topologia di rete
+- Tabelle di assegnazione subnet
+
+**Sicurezza:**
+- Utilizzo indirizzi privati (RFC 1918)
+- NAT per accesso Internet
+- Firewall ai confini di rete
+
+**Ridondanza:**
+- Server DNS multipli
+- Gateway ridondanti (VRRP/HSRP)
+- Link backup per connettività critica
+
+**Monitoraggio:**
+- SNMP per dispositivi di rete
+- Logging centralizzato
+- Alerting automatico per problemi
+
 ---
 
 # Da qui in poi è da far riformattare a claude <3
 
 ---
-
-# PDF_10
-
-#### Interfaccia RS422
-
-Nato per la trasmissione di segnali digitali fino a 10Mbits/s fino a 1200m.
-Questo standard impone che ogni linea differenziale sia pilotata da un driver
-Anche se è più comune l'utilizzo per le connessioni punto a punto , ci possono essere fino a 10 ricevitori.
-
-Gli stati sono rappresentati così:
-
-- quando il terminale A è negativo rispetto a B la linea rappresenta un 1 binario. Tale stato rappresenta anche uno stato di idle
-- quando A è positivio rispetto a B la linea rappresenta uno 0 binario
-  A>B = 0, A<B = 1
-  ![alt text](images/rs422.png)
-
-A e B quindi hanno sempre due valori opposti tra di loro.
-La differenza di potenziale tra A e B deve essere almeno di 4V.
-
-### Reti per la trasmissione dati
-
-- PSTN (Public Switching Telephone Network)
-- ISDN (Integrated Service Digital Network)
-- CATV (Community Antenna Television (negli USA))
-- LAN (Local Area Network)
-- VPN (Virtual Private Network)
-- Wireless Network
-  non sono altro che connessioni fisiche ad una seconda rete, quella degi ISP (internet service provider) che fornisce un punto di accesso ad internet
-
-### Strutture di rete
-
-In italia tutt'ora viene usato per la maggiore il doppino telefonico twisted pair. Sono tratti di cavo con centinaia di doppini connessi a punti per la flessibilità usati per il controllo. I tratti di doppino sono distinti in:
-
-- rete di accesso primaria => tra centrale e armadio, formata da cavi con centinaia di coppie
-- secondaria => tra armadio e distributore, formata da cavi con decine di coppie
-- raccordo cliente o cablaggio verticale => tra distributore e borchia di accesso
-
-#### FTTH, FTTC, FTTB - Fibra ottica
-
-- FTTH => fiber to the home
-  - OLT (optical line termination)
-  - ONU (optical network unit) => intefaccia con terminale, in genere "vicino all'utente"
-  - ONT (optical network termination)
-- FTTC => fiber to the cabinet => poi rame fino alla "casa"
-- FTTB => fiber to the building => fibra fino ad una centralina condominiale con successivo collegamento in rame.
-
-L'utilizzo d FTTH porta a due approcci distinti all'uso della fibra:
-
-- AON (active optical network) => detet anche p2p
-- PON (passive optical network) => assenza di apparati attivi al di fuori delle sedi dove sono collegati OLT ONT o ONU. Usa topologia ad albero
-
-#### Banda larga
-
-##### XDSL
-
-Questo gruppo di sistemi hanno caratteristiche favorevoli per la banda larga come cavi a coppie recenti e circuiti utenti brevi. In italia però come al solito le cose o non le facciamo o le facciamo male, infatti 1/3 della popolazione non ha nel suo comune centrali con termiali DSLAM.
-Il DSLAM multipla miglialia di addessi in un'unica interfaccia ad alta densità verso la rete di trasporto.
-Opera come uno switch network a livello 2 OSI.
-
-##### Televisione Digitale Terrestre Interattiva
-
-C'è lo standard europeo DVB-H che permette a piccoli apparati di ricevere.
-Combina gli standard del video digitale con IP suddividendo i contenuti in paccheti di dati da trasferire su cellulare e leggibile da parte dell'utente.
-
-##### Comunicazioni mobili di 3° e 4° generazione
-
-Tech 3G e 4G
-HSPA, high speed packet access è l'anello successivo della catena costituita da
-
-- GSM (global system for mobile communications)
-- GPRS (general packet radio service)
-- UMTS (uniersal mobile telecommunications system)
-  e' gia presente nel mercato.
-
-##### PDH
-
-Plesiochronous Digital Hierarchy, tecnologia che permetti multuplexing e demu dei canali aggregati. Qui due unità sono sincornizzate ma non perefttamente. Infatti ogni volta che si vuole estrarre da un canale si estrae un elemente della gerarchia per volta.
-La codifica PCM genera flussi da 64kbit/s e si inviano in trame che si ripetono ogni 125ms.
-PDH è il pirmo metodo di multiplazione per trasmettere molti canali isnieme con l'aggiunta di due canali di controllo (32 trame in totale).
-Viene usato un multiplexer TDM. Il multiplexer deve inserire slot aggiuntivi per compensare la differenza di bitrate e rendere sincrono il flusso in entrata al multiplexer ricevente.
-PDH non controlla le prestazioni della rete.
-
-##### SDH
-
-Synchronous Digital Hierarchy nasce per ovviare a problemi di temporizzazione di PDH. E' un protocollo a livello fisico usato per la trasmissione di fonia e dati su fibra e rete elettrica. Aggrega flussi con bitrate diversi e li spedisci tutti insieme.
-
-Questo protocollo prevede che tutti gli elementi di rete siano sincronizzati sullo stesso clock. Permette di raggiungere elevati livelli di qualità con l'invio di informazioni di servizio.
-Viene oggi usata per anelli ottici di accesso con topologia a rete o P2P. Non presenta limiti di distanza e offre una velocita di 140Gb/s.
-Unico limite, l'uso di TDM.
-Per reti con maggior numero di accessi per anello si preferisce l'uso di tecnologie per la multiplazione statica delle risorse, come Gigabit Ethernet.
-SDH oggi si sviluppa in OTN (optical transport network)
-
-# PDF_11
-
-##### SONET
-
-Al livello 3 OSI è responsabile della comunicazione end to end.
-Controlla e gestisce lo stato di una connessione.
-Lien Layer si occupa di multiplazione di diversi path tra due nodi e della protezione ai guasti.
-Section Layer definisce le funzione dei rigeneratori lungo il canale. (Livello 2 OSI)
-Photonic Layer definisce il formato di trasmissione su fibra (Livello 1 OSI).
-
-##### Rete CDN
-
-Rete digitale parallela alla PSTN. Prevvede una rete centrale e multiplazione verso gli utenti.
-I collegamenti diretti numerici permettono collegamenti punto punto o punto multipunto con tecniche digitali.
-Mette a disposizione del cliente un flusso dati della banda desiderata tra due località qualunque del territorio nazionale.
-La tecnica di multiplazione è del tutto trasparente.
-
-##### Rete ISDN
-
-Nasce come evoluzione della rete telefonica.
-Ha come scopo quello di portare un collegamento digitale a tutte le scrivanie senza l'uso di un modem.
-Necessita di apparati specifici installati sia presso la centrale che presso l'utente.
-Il vantaggio è quelllo di avere su un unico numero 3 canali: 2 per fonia/dati detti B e 1 di controllo detto canale D.
-Ci sono due soluzioni:
-
-- BRI (basic rate interface)
-- PRI (primary raet interface). Questa è rivolta ad aziende molto grandi visto che supporta fino a 30 linee multuplate ISDN. L'accesso avviene con un flusso a 2Mbit.
-
-L'accesso usa il protocollo di livello 2 LAPD (link access protocolo channel D)e lavora in ABM (modalità asincrona bilanciata).
-Viene installato presso l'utente una borchia ISDN NT1 con i 3 canali.
-I due canali B possono essere raggruppati e avere un canale da 128Kbps.
-Il segnale in linea è digitale 2B1Q e non necessita di conversioni A/D.
-Usa due dispositivi principali come detto prima
-
-- NT1, ha lo scopo di terminare la linea e di convertire il doppino in un bus denominato S. Quest'ultimo è fatto da 8 fili con connettori RJ45 tipico delle reti LAN ETH 10/100base T.
-- TA (adapter), usato per interfaciare gli oggetti che non possono essere connesi al bus di tipo S direttamente.
-  Il centralino usato per ISDN è denominato ISPBX.
-
-#### Sandard della videocomunicazione
-
-- H.320 => consente la tramissione audio/video su linee digitali ISDN. La trasmissione avviene in digiale indipendentemente dalla velocità di ISDN
-- H.323 => standar edlle sessioni di comunicazine audio, video e dati attraverso reti orientate alla connessine. Non è garantita qualità. Diverse applicazioni di diversi produttori possono così operare senza problemi di compatibilità.
-- H.324 => standard internazionale per comunicazione multimediale su basso bit rate. (PLMN e 3G ed esempio).
-- T.120 => standard delle conferenze dati che fornisce comunicazione in tempo reale tra due o più partecipanti. Comprende funzioni aggiuntive come "una lavagna elettronica", chat, scambio file e condivisione di applicazioni.
-
-## Protocolli del secondo livello ISO-OSI
-
-Il secondo livello, Data Link, si occupa del corretto trasferimento dei dati nella linea trasmissiva strutturando i dati in frames e attuando un controllo di flusso.
-Pur avendo definito interfaccia e linea, rimane da indicare tutte le informazioni che il trasmettitore dovrà inviare al ricevitore.
-Di questo si occupano i protocolli di trasmissione, in particolare quelli al secondo livello.
-Questi rappresentano le regole che DTE, DCE e CPE devono seguire affinchè laa ricezione di dati avvenga correttamente.
-Ci sono due principali categorie.
-
-### Protocolli Asinctroni (o start/stop)
-
-Pirma forma di protocolli per la trasmisione dati.
-Permettono la trasmissione di caratteri singoli senza stabilire l'intervallo tra due caratteri successivi.
-Deve comunque essere definito un bit time di durata.
-Ogni char ha un bit di start, uno di partà e uno o due di stop.
-Può avvenire un errore di framing in caso il bit di stop non corrisponda.
-Tipico pacchetto
-![alt text](images/xmodemAsync.png)
-
-- all'inizio il ricevente invia un segnale di NAK ogni 10 secondi segnalando disponibilità
-- il trasmettitore invia un pacchetto come quello sopra
-  - ASCII 06H ack per ricezione corretta
-  - ASCII NAK, ricezione sbagliata
-- al termine il mittente invia ASCII 04H, EOT
-- il ricevitore riconosce EOT con ACK
-
-### Protocolli Sincroni
-
-Non sono presenti bit di starto o stop, ma caratteri di sincronismo SYN nel particolare per protocolli orientati al carattere oppure sequenze di bit (flags) per protocolli orientati al bit.
-La trama è composta da un numero di bit definiti dal protocollo.
-
-#### BSC
-
-BINARY SYNCRONOUS COMMUNICATIONS si divide in 3 tipi
-
-- 1 => rete dedicata p2p
-- 2 => rete commutata p2p
-- 3 => rete multipunnto
-  Usa i seguenti codici
-- ASCII
-- EBCDIC
-- SBT
-  Vi sono trame di controllo o informative.
-  In caso di p2p il trasmettitore invia caratteri di sincronismo. I DTE possono essere sia trasmettitori che riceventi. In caso vi sia una contesa uno dei due diventa una stazione primaria che ripete l'invio mentre l'altro diventa secondaria.
-  Il segnale di ricezione si risponde con ACK oppure NAK e si termina con EOT.
-
-Nel caso di BSC3 multipunto viene fatta un'interrogazione ciclica per individuare il terminale a cui collegarsi.
-
-#### HDLC
-
-High Level Data Link Control, protocollo orientato ai bit per grandi reti.
-E' un protocollo standar ISO per trasmissioni sincrone full duplex.
-I formati sono fissi definiti in frames o trame.
-Si può avere una connessione:
-
-- bilanciata => tra dua stazioone paritetiche
-- sbilanciata => una stazion primaria, più secondarie. Half Duplex con un master.
-  Si ha in 3 modalità:
-- NRM (Normal Response mode) => sbilanciarta half duplex
-- ABM (Async Balanced Mode) => unica modalità prevista da LAPB (B channel). Bilanciata full duplex
-- ARM (Async Response Mode) => simile a NRM ma limitata a due stazioni
-
-![alt text](images/tramaHDLC.png)
-
-- Flag => 8 bit, stabilisce la sincronizzazione, trasmesso continuamente in linea idle. Si fa bit stuffing.
-- Indirizzo => 8 bit estendibile come LLC. Non india protocollo a livello di rete ma altre infor
-- Controllo => campo 8 bit estendibile che identifica il tipo di trama.
-- Campo informativo => contiene il pacchhetto dati fornito al livello OSI 3. Non esistono limiti per l'ampiezza di questo campo.
-- FCSs => frame check sequence, di ridondanza, da almeno 16bit.
-
-I principali valori del campo di controllo in HDLC sono:
-
-- I-frame per dati + numeri di sequenza.
-- S-frame per controllo, ack e richieste
-- U-frame per setup, gestione link, comandi specialie
-
-Non ho voglia per ora di segnarmi tutti i singoli valori del, campo, bastano queste info qui dai...
-
-# Secondo Modulo
-
-# PDF_1
-
-## TCP/IP
-
-### IP address
-
-Su 32 bit identifica univocamente in rete uno specifico host della rete
-Si divide in 2 parti, host e rete.
-Ci sono 4 tipi di classi di IP address.
-
-![alt text](images/classiIP.png)
-
-#### Indirizzi riservati
-
-![alt text](images/indirizziRiservati.png)
-
-> !Gli indirizzi vengono assegnati alle intrfacce non agli host!
-
-#### Sottoreti
-
-Un IP addresso può essere localmente modificato usando parzialmente i bit relativi agli host come bit di indirizzo per sottoreti.
-Si applica una subnet mask.
-
-- se un bit su una subnet mask è a 1, l'equivalente indirizzo IP è interpretato come un network bit, cioè appartiene ad un indirizzo di rete
-- se è a 0, il relativo bit fa parte di un indirizzo di host
-
-![alt text](images/subnetMask.png)
-
-![alt text](images/sottoretiS.png)
-
-### Tabella di routing
-I gateway instradano i dati tra diverse reti.
-Gil host prendono decisioni di instradamento ne seguente modo:
-  - se l'host di destinazione sta sulla rete locale viene mandato direttamente 
-  - se l'host è remoto, i dati vengono mandati ad un gateay locale
-
-L'analisi dell'indirizzo ip fatta dall'host
-  - determina il tipo di classe
-  - controlla la rete di destinazione
-  - cerca la rete nella routing table
-  - instrada i pacchetti di dati seguendo la tabella di routing
-
-> netstat -nr fa vedere la tabella di routing
-
-![alt text](images/routingTable.png)
-
-![alt text](images/schemaRouting.png)
-
-# PDF_2
-
-# PDF_3
-
 # PDF_4
+## Internet Deamon 
+
 
 # PDF_5
 
 # PDF_6
 
 # PDF_PARTE_FINALE
+ 
