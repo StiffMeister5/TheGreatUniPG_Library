@@ -1309,9 +1309,7 @@ Il doppino telefonico possiede una discreta banda, limitata però a soli 4 kHz.
 - Per PC: schede su bus PCI
 - Connettori: 4 pin o 6 pin
 
-# Appunti di Reti - Moduli 1 e 2
-
-## MODULO 1
+# PDF_10
 
 ### Interfaccia RS422
 
@@ -1440,6 +1438,8 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 **Evoluzione:**
 - Per reti con maggior numero di accessi si preferisce Gigabit Ethernet
 - SDH evolve in OTN (Optical Transport Network)
+
+# PDF_11
 
 ### SONET (Synchronous Optical Network)
 
@@ -1684,7 +1684,9 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 
 ---
 
-## MODULO 2 - TCP/IP
+# MODULO 2 - TCP/IP
+
+# PDF_1
 
 ### Indirizzamento IP
 
@@ -1800,6 +1802,8 @@ netstat -nr
 - **D**: route creata dinamicamente
 - **M**: route modificata dinamicamente
 
+# PDF_2
+
 ### ARP (Address Resolution Protocol)
 
 **Funzione:**
@@ -1907,6 +1911,8 @@ cat /etc/services
 - FCS (4 byte)
 
 ---
+
+# PDF_3
 
 ## Name Service (Servizi di Risoluzione Nomi)
 
