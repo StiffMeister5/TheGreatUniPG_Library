@@ -77,7 +77,12 @@
   - [Configurazione Routing](#configurazione-del-routing)
   - [Definizione Sottoreti](#definizione-delle-sottoreti)
 - [PDF_4](#secondo-modulo---pdf_4)
+  - [Internet Daemon](#internet-deamon)
+  - [TCP/IP](#architettura-rete-tcpip)
+  - [Dispositivi OSI](#dispositivi-e-livelli-osi)
+  - [Protocolli](#protocolli)
 - [PDF_5](#secondo-modulo---pdf_5)
+  - [Configurazione routing APPROFONDITA] (#configurazione-del-routing-approfondita)
 - [PDF_6](#secondo-modulo---pdf_6)
 - [PDF_PARTE_FINALE](#secondo-modulo---pdf_parte_finale)
 
@@ -1342,11 +1347,13 @@ Il doppino telefonico possiede una discreta banda, limitata però a soli 4 kHz.
 Standard nato per la trasmissione di segnali digitali fino a 10 Mbits/s su distanze fino a 1200m.
 
 **Caratteristiche principali:**
+
 - Ogni linea differenziale è pilotata da un driver dedicato
 - Utilizzo comune per connessioni punto a punto
 - Supporto fino a 10 ricevitori per linea
 
 **Stati logici:**
+
 - **Stato logico 1 (idle)**: terminale A negativo rispetto a B (A < B)
 - **Stato logico 0**: terminale A positivo rispetto a B (A > B)
 - La differenza di potenziale tra A e B deve essere almeno 4V
@@ -1355,6 +1362,7 @@ Standard nato per la trasmissione di segnali digitali fino a 10 Mbits/s su dista
 ### Reti per la Trasmissione Dati
 
 **Tipologie principali:**
+
 - **PSTN** (Public Switching Telephone Network)
 - **ISDN** (Integrated Service Digital Network)
 - **CATV** (Community Antenna Television)
@@ -1371,9 +1379,11 @@ Queste rappresentano connessioni fisiche a reti di ISP (Internet Service Provide
 La rete italiana si basa prevalentemente su doppini telefonici organizzati in tre livelli:
 
 1. **Rete di accesso primaria**: tra centrale e armadio stradale
+
    - Composta da cavi con centinaia di coppie
 
 2. **Rete secondaria**: tra armadio e distributore
+
    - Composta da cavi con decine di coppie
 
 3. **Raccordo cliente (cablaggio verticale)**: tra distributore e borchia di accesso
@@ -1382,22 +1392,25 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 ### Tecnologie in Fibra Ottica
 
 **FTTH (Fiber To The Home):**
+
 - **OLT** (Optical Line Termination): terminazione in centrale
 - **ONU** (Optical Network Unit): interfaccia con il terminale utente
 - **ONT** (Optical Network Termination): terminazione ottica presso l'utente
 
 **FTTC (Fiber To The Cabinet):**
+
 - Fibra fino all'armadio stradale
 - Ultimo tratto in rame fino all'abitazione
 
 **FTTB (Fiber To The Building):**
+
 - Fibra fino alla centralina condominiale
 - Collegamento finale in rame
 
 **Architetture di rete in fibra:**
+
 - **AON** (Active Optical Network): detta anche P2P (Point-to-Point)
   - Presenza di apparati attivi lungo il percorso
-  
 - **PON** (Passive Optical Network):
   - Assenza di apparati attivi tra OLT e ONT/ONU
   - Utilizza topologia ad albero
@@ -1408,10 +1421,12 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 #### xDSL
 
 **Caratteristiche:**
+
 - Sfrutta cavi a coppie recenti e circuiti utente brevi
 - In Italia circa 1/3 della popolazione non ha accesso a centrali DSLAM nel proprio comune
 
 **DSLAM** (Digital Subscriber Line Access Multiplexer):
+
 - Multiplexa migliaia di accessi DSL
 - Fornisce un'unica interfaccia ad alta densità verso la rete di trasporto
 - Opera come switch di rete a livello 2 OSI
@@ -1419,6 +1434,7 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 #### Televisione Digitale Terrestre Interattiva (DVB-H)
 
 **Standard europeo DVB-H:**
+
 - Permette ricezione su dispositivi portatili
 - Combina standard video digitale con protocollo IP
 - Suddivide contenuti in pacchetti dati trasferibili su rete cellulare
@@ -1426,6 +1442,7 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 #### Comunicazioni Mobili 3G e 4G
 
 **Evoluzione delle tecnologie:**
+
 1. **GSM** (Global System for Mobile Communications)
 2. **GPRS** (General Packet Radio Service)
 3. **UMTS** (Universal Mobile Telecommunications System)
@@ -1434,11 +1451,13 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 ### PDH (Plesiochronous Digital Hierarchy)
 
 **Caratteristiche:**
+
 - Tecnologia per multiplexing e demultiplexing di canali aggregati
 - Le unità sono sincronizzate ma non perfettamente
 - Per estrarre un singolo canale è necessario estrarre un elemento della gerarchia per volta
 
 **Funzionamento:**
+
 - Codifica PCM genera flussi da 64 kbit/s
 - Trame ripetute ogni 125 μs
 - Primo metodo di multiplazione con 32 canali (30 dati + 2 controllo)
@@ -1449,12 +1468,14 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 ### SDH (Synchronous Digital Hierarchy)
 
 **Vantaggi rispetto a PDH:**
+
 - Risolve i problemi di temporizzazione di PDH
 - Protocollo a livello fisico per trasmissione su fibra e rete elettrica
 - Tutti gli elementi di rete sincronizzati sullo stesso clock
 - Aggrega flussi con bitrate diversi
 
 **Caratteristiche tecniche:**
+
 - Permette elevati livelli di qualità tramite informazioni di servizio
 - Utilizzata per anelli ottici di accesso (topologia a rete o P2P)
 - Nessun limite di distanza
@@ -1462,6 +1483,7 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 - **Limitazione**: utilizza TDM
 
 **Evoluzione:**
+
 - Per reti con maggior numero di accessi si preferisce Gigabit Ethernet
 - SDH evolve in OTN (Optical Transport Network)
 
@@ -1472,14 +1494,17 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 **Architettura a livelli:**
 
 1. **Path Layer** (Livello 3 OSI):
+
    - Responsabile della comunicazione end-to-end
    - Controlla e gestisce lo stato delle connessioni
 
 2. **Line Layer** (Livello 2 OSI):
+
    - Multiplexing di diversi path tra due nodi
    - Protezione ai guasti
 
 3. **Section Layer** (Livello 2 OSI):
+
    - Definisce funzioni dei rigeneratori lungo il canale
 
 4. **Photonic Layer** (Livello 1 OSI):
@@ -1488,6 +1513,7 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 ### Rete CDN (Circuit Data Network)
 
 **Caratteristiche:**
+
 - Rete digitale parallela alla PSTN
 - Rete centrale con multiplazione verso gli utenti
 - Collegamenti numerici punto-punto o punto-multipunto
@@ -1497,11 +1523,13 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 ### Rete ISDN (Integrated Services Digital Network)
 
 **Obiettivi:**
+
 - Evoluzione della rete telefonica tradizionale
 - Collegamento digitale end-to-end senza modem
 - Richiede apparati specifici presso centrale e utente
 
 **Struttura canali:**
+
 - **2 canali B**: per fonia/dati (64 kbit/s ciascuno)
 - **1 canale D**: di controllo e segnalazione (16 kbit/s)
 - Possibilità di raggruppare i due canali B per ottenere 128 kbit/s
@@ -1509,6 +1537,7 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 **Soluzioni di accesso:**
 
 1. **BRI** (Basic Rate Interface):
+
    - Per utenti residenziali e piccole aziende
    - 2B+D (144 kbit/s totali)
 
@@ -1521,17 +1550,20 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 **Componenti hardware:**
 
 - **NT1** (Network Termination 1):
+
   - Termina la linea ISDN
   - Converte il doppino in bus S (8 fili, connettori RJ45)
   - Bus S compatibile con LAN Ethernet 10/100baseT
 
 - **TA** (Terminal Adapter):
+
   - Interfaccia dispositivi non nativamente compatibili con bus S
   - Conversione per apparecchi analogici
 
 - **ISPBX**: centralino telefonico per ISDN
 
 **Protocolli:**
+
 - **LAPD** (Link Access Protocol channel D): protocollo di livello 2
 - Modalità **ABM** (Asynchronous Balanced Mode)
 - Segnale in linea digitale **2B1Q** (no conversione A/D necessaria)
@@ -1539,19 +1571,23 @@ La rete italiana si basa prevalentemente su doppini telefonici organizzati in tr
 ### Standard di Videocomunicazione
 
 #### H.320
+
 - Trasmissione audio/video su linee digitali ISDN
 - Trasmissione digitale indipendente dalla velocità ISDN
 
 #### H.323
+
 - Standard per sessioni audio, video e dati su reti packet-switched
 - Non garantisce QoS (Quality of Service)
 - Interoperabilità tra applicazioni di produttori diversi
 
 #### H.324
+
 - Comunicazione multimediale su linee a basso bitrate
 - Per reti PLMN (Public Land Mobile Network) e 3G
 
 #### T.120
+
 - Standard per conferenze dati
 - Comunicazione real-time tra più partecipanti
 - Funzioni aggiuntive:
@@ -1571,22 +1607,26 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 ### Protocolli Asincroni (Start/Stop)
 
 **Caratteristiche:**
+
 - Prima forma di protocollo per trasmissione dati
 - Trasmissione di caratteri singoli
 - Intervallo variabile tra caratteri successivi
 - Bit time di durata definita
 
 **Struttura frame:**
+
 - 1 bit di start
 - n bit di dati (tipicamente 7-8)
 - 1 bit di parità (opzionale)
 - 1-2 bit di stop
 
 **Gestione errori:**
+
 - Errore di framing se il bit di stop non corrisponde
 - Protocollo XMODEM tipico esempio
 
 **Protocollo XMODEM:**
+
 1. Ricevente invia **NAK** ogni 10 secondi per segnalare disponibilità
 2. Trasmettitore invia pacchetto dati
 3. Ricevente risponde:
@@ -1598,6 +1638,7 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 ### Protocolli Sincroni
 
 **Differenze rispetto agli asincroni:**
+
 - Assenza di bit di start/stop
 - Sincronizzazione tramite:
   - Caratteri SYN (protocolli orientati al carattere)
@@ -1607,20 +1648,24 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 #### BSC (Binary Synchronous Communications)
 
 **Tre modalità operative:**
+
 1. Rete dedicata punto-punto
 2. Rete commutata punto-punto
 3. Rete multipunto
 
 **Codifiche supportate:**
+
 - ASCII
 - EBCDIC
 - SBT (Six-Bit Transcode)
 
 **Tipi di trame:**
+
 - Trame di controllo
 - Trame informative
 
 **Funzionamento punto-punto:**
+
 - Trasmettitore invia caratteri di sincronismo (SYN)
 - Entrambi i DTE possono essere trasmettitori o ricevitori
 - In caso di contesa:
@@ -1630,12 +1675,14 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 - Terminazione con EOT
 
 **Funzionamento multipunto (BSC3):**
+
 - Interrogazione ciclica (polling) per individuare terminale destinatario
 - Stazione primaria gestisce le comunicazioni
 
 #### HDLC (High-Level Data Link Control)
 
 **Caratteristiche generali:**
+
 - Protocollo orientato ai bit
 - Standard ISO per trasmissioni sincrone full-duplex
 - Formati fissi definiti in frame/trame
@@ -1649,10 +1696,12 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 **Modalità operative:**
 
 1. **NRM** (Normal Response Mode):
+
    - Sbilanciata, half-duplex
    - Stazione secondaria trasmette solo su permesso
 
 2. **ABM** (Asynchronous Balanced Mode):
+
    - Unica modalità LAPB (canale B)
    - Bilanciata, full-duplex
    - Entrambe le stazioni possono iniziare trasmissione
@@ -1673,18 +1722,22 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 **Campi del frame:**
 
 1. **Flag** (01111110):
+
    - Delimitatore di inizio/fine frame
    - Trasmesso continuamente in linea idle
    - Utilizza bit stuffing per trasparenza
 
 2. **Indirizzo** (8 bit, estendibile):
+
    - Non indica protocollo di livello rete
    - Contiene altre informazioni di controllo
 
 3. **Controllo** (8 bit, estendibile):
+
    - Identifica tipo di trama
 
 4. **Campo informativo**:
+
    - Contiene pacchetto dati da livello OSI 3
    - Nessun limite teorico di ampiezza
 
@@ -1695,10 +1748,12 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 **Tipi di frame:**
 
 1. **I-frame** (Information):
+
    - Trasporto dati utente
    - Contiene numeri di sequenza per controllo flusso
 
 2. **S-frame** (Supervisory):
+
    - Controllo flusso
    - ACK e richieste di ritrasmissione
    - Non contiene campo informativo
@@ -1717,6 +1772,7 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 ### Indirizzamento IP
 
 **Struttura IP address:**
+
 - 32 bit (IPv4)
 - Identifica univocamente un host in rete
 - Suddiviso in due parti:
@@ -1728,6 +1784,7 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 ### Classi di Indirizzi IP
 
 **Classe A:**
+
 - Primo bit: 0
 - Range: 1.0.0.0 - 126.255.255.255
 - Subnet mask: 255.0.0.0 (/8)
@@ -1735,6 +1792,7 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 - Host per rete: 16.777.214
 
 **Classe B:**
+
 - Primi due bit: 10
 - Range: 128.0.0.0 - 191.255.255.255
 - Subnet mask: 255.255.0.0 (/16)
@@ -1742,6 +1800,7 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 - Host per rete: 65.534
 
 **Classe C:**
+
 - Primi tre bit: 110
 - Range: 192.0.0.0 - 223.255.255.255
 - Subnet mask: 255.255.255.0 (/24)
@@ -1749,11 +1808,13 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 - Host per rete: 254
 
 **Classe D:**
+
 - Primi quattro bit: 1110
 - Range: 224.0.0.0 - 239.255.255.255
 - Utilizzo: multicast
 
 **Classe E:**
+
 - Primi quattro bit: 1111
 - Range: 240.0.0.0 - 255.255.255.255
 - Riservata per uso sperimentale
@@ -1761,11 +1822,13 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 ### Indirizzi IP Riservati
 
 **Indirizzi privati (RFC 1918):**
+
 - Classe A: 10.0.0.0/8
 - Classe B: 172.16.0.0/12 (172.16.0.0 - 172.31.255.255)
 - Classe C: 192.168.0.0/16
 
 **Altri indirizzi speciali:**
+
 - **127.0.0.0/8**: loopback (127.0.0.1)
 - **0.0.0.0**: indirizzo non specificato
 - **255.255.255.255**: broadcast limitato
@@ -1775,14 +1838,17 @@ I protocolli di trasmissione definiscono le regole che DTE, DCE e CPE devono seg
 ### Subnetting
 
 **Subnet Mask:**
+
 - Permette di suddividere una rete in sottoreti
 - Utilizza parte dei bit host come bit di rete
 
 **Regole:**
+
 - Bit a **1**: parte dell'indirizzo di rete
 - Bit a **0**: parte dell'indirizzo host
 
 **Esempio pratico:**
+
 ```
 IP: 192.168.1.130
 Subnet mask: 255.255.255.192 (/26)
@@ -1800,21 +1866,25 @@ Host disponibili: 62
 I gateway instradano dati tra reti diverse.
 
 **Decisioni di instradamento dell'host:**
+
 1. Se destinazione è sulla rete locale → invio diretto
 2. Se destinazione è remota → invio a gateway locale
 
 **Processo di analisi indirizzo IP:**
+
 1. Determina classe dell'indirizzo
 2. Estrae network ID di destinazione
 3. Cerca rete nella routing table
 4. Instrada pacchetti secondo la tabella
 
 **Visualizzare routing table:**
+
 ```bash
 netstat -nr
 ```
 
 **Struttura routing table:**
+
 - **Destination**: rete di destinazione
 - **Gateway**: gateway da utilizzare
 - **Genmask**: subnet mask
@@ -1822,6 +1892,7 @@ netstat -nr
 - **Iface**: interfaccia di uscita
 
 **Route flags comuni:**
+
 - **U**: route attiva (Up)
 - **G**: route utilizza gateway
 - **H**: route verso host specifico
@@ -1836,17 +1907,20 @@ netstat -nr
 Risoluzione dinamica indirizzi IP in indirizzi fisici (MAC address)
 
 **Funzionamento:**
+
 1. Host A necessita MAC address di Host B
 2. Host A invia richiesta ARP in broadcast sulla LAN
 3. Host B risponde con il proprio MAC address
 4. Host A memorizza associazione in cache ARP
 
 **Cache ARP:**
+
 - Ogni macchina mantiene una cache ARP
 - Memorizza associazioni IP-MAC temporanee
 - Riduce traffico di rete
 
 **Visualizzare cache ARP:**
+
 ```bash
 arp -a
 ```
@@ -1854,10 +1928,12 @@ arp -a
 ### RARP (Reverse ARP)
 
 **Utilizzo:**
+
 - Per workstation diskless
 - Per dispositivi senza storage locale
 
 **Funzionamento:**
+
 1. Workstation conosce solo il proprio MAC address
 2. Invia richiesta RARP broadcast
 3. Server RARP risponde con IP address assegnato
@@ -1866,15 +1942,18 @@ arp -a
 ### Numeri di Protocollo
 
 **Definizione:**
+
 - Byte nel datagram header IP
 - Identifica protocollo del livello superiore
 
 **File di configurazione:**
+
 ```bash
 cat /etc/protocols
 ```
 
 **Protocolli comuni:**
+
 - **1**: ICMP
 - **6**: TCP
 - **17**: UDP
@@ -1883,30 +1962,37 @@ cat /etc/protocols
 ### Numeri di Porta
 
 **Caratteristiche:**
+
 - 16 bit (0-65535)
 - Identificano processi/servizi su un host
 
 **Tipi di porte:**
+
 1. **Well-known ports** (0-1023):
+
    - Servizi standard
    - Richiedono privilegi root
 
 2. **Registered ports** (1024-49151):
+
    - Servizi registrati IANA
 
 3. **Dynamic/Private ports** (49152-65535):
    - Assegnazione dinamica
 
 **Porte nel TCP segment:**
+
 - **Source port**: porta sorgente
 - **Destination port**: porta destinazione
 
 **Visualizzare porte:**
+
 ```bash
 cat /etc/services
 ```
 
 **Porte comuni:**
+
 - **20/21**: FTP (dati/controllo)
 - **22**: SSH
 - **23**: Telnet
@@ -1920,6 +2006,7 @@ cat /etc/services
 ### Struttura Frame di Rete
 
 **Incapsulamento:**
+
 ```
 [Frame Ethernet]
   [Datagram IP]
@@ -1928,6 +2015,7 @@ cat /etc/services
 ```
 
 **Frame Ethernet:**
+
 - Preamble (7 byte)
 - SFD (1 byte)
 - MAC destinazione (6 byte)
@@ -1943,9 +2031,11 @@ cat /etc/services
 ## Name Service (Servizi di Risoluzione Nomi)
 
 ### Funzione
+
 Associa nomi simbolici (hostname) agli indirizzi IP delle interfacce di rete.
 
 **Caratteristiche:**
+
 - Nomi e IP sono generalmente intercambiabili
 - Il sistema converte automaticamente hostname → IP
 - Necessaria traduzione nota a tutti gli host della rete
@@ -1953,17 +2043,20 @@ Associa nomi simbolici (hostname) agli indirizzi IP delle interfacce di rete.
 ### Host Table
 
 **File di configurazione:**
+
 ```bash
 /etc/hosts
 ```
 
 **Caratteristiche:**
+
 - Tabella statica locale
 - Formato: `IP_address hostname [alias...]`
 - Utilizzata come fallback se DNS non disponibile
 - Utile per host critici locali
 
 **Esempio:**
+
 ```
 127.0.0.1       localhost
 192.168.1.1     router gateway
@@ -1971,6 +2064,7 @@ Associa nomi simbolici (hostname) agli indirizzi IP delle interfacce di rete.
 ```
 
 **NIC Host Table:**
+
 - Registro centralizzato degli host registrati
 - Scaricabile via FTP da NIC
 - Ormai obsoleta per reti grandi
@@ -1978,12 +2072,14 @@ Associa nomi simbolici (hostname) agli indirizzi IP delle interfacce di rete.
 ### DNS (Domain Name System)
 
 **Caratteristiche:**
+
 - Sistema di database distribuiti
 - Architettura gerarchica
 - Aggiornamento automatico della rete
 - Scalabile per reti di qualsiasi dimensione
 
 **Funzionamento:**
+
 1. Client invia query DNS al server locale
 2. Se il server non ha l'informazione:
    - Inoltra query al server autoritativo
@@ -1994,6 +2090,7 @@ Associa nomi simbolici (hostname) agli indirizzi IP delle interfacce di rete.
 **Componenti DNS (BIND - Berkeley Internet Name Domain):**
 
 1. **Resolver**:
+
    - Gestisce le query DNS
    - Componente client
    - Libreria utilizzata dalle applicazioni
@@ -2006,11 +2103,13 @@ Associa nomi simbolici (hostname) agli indirizzi IP delle interfacce di rete.
 **Tipi di Name Server:**
 
 1. **Primary Server (Master)**:
+
    - Fonte autoritativa per un dominio
    - Carica dati da file di zona locali
    - Autorità primaria per il dominio
 
 2. **Secondary Server (Slave)**:
+
    - Backup del primary server
    - Trasferisce intero database dal primary (zone transfer)
    - Fornisce ridondanza e load balancing
@@ -2021,6 +2120,7 @@ Associa nomi simbolici (hostname) agli indirizzi IP delle interfacce di rete.
    - Riduce carico di rete e tempo di risposta
 
 **Gerarchia DNS:**
+
 ```
 .                    (root)
 ├── com
@@ -2051,11 +2151,13 @@ Per configurare correttamente un host TCP/IP sono necessari:
 ### Assegnazione Indirizzi IP
 
 **Autorità di assegnazione:**
+
 - **NIC** (Network Information Center) - storicamente
 - **RIPE** (Réseaux IP Européens) - per Europa
 - **IANA/ICANN** - coordinamento globale
 
 **Strategie di assegnazione:**
+
 1. **Sequenziale**: indirizzi consecutivi agli host
 2. **A blocchi**: blocchi di indirizzi per sottoreti
    - Delega gestione a amministratori di sottorete
@@ -2066,50 +2168,60 @@ Per configurare correttamente un host TCP/IP sono necessari:
 **Tre approcci principali:**
 
 #### 1. Routing Minimale
+
 - Nessuna configurazione di routing necessaria
 - Host connesso a una sola rete
 - Nessun gateway configurato
 - Comunicazione solo sulla rete locale
 
 **Caso d'uso:**
+
 - Workstation in rete isolata
 - Dispositivi IoT su VLAN dedicata
 
 #### 2. Routing Statico
+
 - Tabelle di routing configurate manualmente
 - Costruite dall'amministratore di rete
 - Route non cambiano automaticamente
 
 **Vantaggi:**
+
 - Controllo totale sul percorso dati
 - Predicibilità del traffico
 - Minimo overhead
 
 **Svantaggi:**
+
 - Manutenzione manuale richiesta
 - Non si adatta a cambiamenti di topologia
 - Scalabilità limitata
 
 **Caso d'uso:**
+
 - Reti piccole e stabili
 - Connessioni punto-punto critiche
 
 #### 3. Routing Dinamico
+
 - Tabelle di routing costruite automaticamente
 - Utilizzo di protocolli di routing
 - Adattamento automatico a cambiamenti di rete
 
 **Protocolli comuni:**
+
 - **RIP** (Routing Information Protocol)
 - **OSPF** (Open Shortest Path First)
 - **BGP** (Border Gateway Protocol)
 
 **Vantaggi:**
+
 - Adattamento automatico a guasti
 - Scalabilità eccellente
 - Bilanciamento del carico
 
 **Svantaggi:**
+
 - Overhead di protocollo
 - Complessità configurazione iniziale
 - Convergenza può richiedere tempo
@@ -2119,14 +2231,17 @@ Per configurare correttamente un host TCP/IP sono necessari:
 **Fattori da considerare:**
 
 1. **Rete senza gateway**:
+
    - Routing minimale
    - Tutti gli host sulla stessa rete
 
 2. **Rete con un solo gateway**:
+
    - Routing statico con default gateway
    - Configurazione semplice
 
 3. **Rete con più gateway interni e uno esterno**:
+
    - Routing statico per sottoreti
    - Default gateway per traffico esterno
 
@@ -2139,25 +2254,30 @@ Per configurare correttamente un host TCP/IP sono necessari:
 #### Motivazioni Topologiche
 
 **1. Superamento limiti di distanza:**
+
 - Componenti hardware hanno limiti fisici
 - Router IP estendono la portata della rete
 - Rigenerazione del segnale
 
 **Esempio:**
+
 - Ethernet 10Base2: max 185m per segmento
 - Router permettono connessione tra edifici
 
 **2. Connessione reti fisiche diverse:**
+
 - Router IP collegano tecnologie diverse
 - Ethernet ↔ Wi-Fi
 - LAN ↔ WAN
 
 **3. Filtro del traffico:**
+
 - Traffico locale rimane nella sottorete locale
 - Riduzione congestione rete
 - Miglioramento prestazioni complessive
 
 **Vantaggi:**
+
 - Broadcast confinati alla sottorete
 - Minor collisioni (in reti shared medium)
 - Banda disponibile maggiore per host
@@ -2165,30 +2285,36 @@ Per configurare correttamente un host TCP/IP sono necessari:
 #### Motivazioni Organizzative
 
 **1. Struttura organizzativa:**
+
 - Sottoreti per dipartimenti/settori
 - Esempio: sottorete per IT, una per vendite, una per produzione
 
 **2. Delegazione amministrativa:**
+
 - Amministratori locali per ogni sottorete
 - Responsabilità distribuite
 - Gestione decentralizzata
 
 **3. Isolamento del traffico (sicurezza):**
+
 - Separazione rete produzione da rete ospiti
 - VLAN per dati sensibili
 - Controllo accessi tra sottoreti
 
 **Implementazione:**
+
 - Firewall tra sottoreti
 - ACL (Access Control List) sui router
 - Segmentazione fisica o logica (VLAN)
 
 **4. Isolamento problemi potenziali:**
+
 - Rete di test separata
 - Ambiente di sviluppo isolato
 - Sperimentazioni senza impatto su produzione
 
 **Vantaggi:**
+
 - Guasti confinati a una sottorete
 - Test senza rischi per produzione
 - Facilità di troubleshooting
@@ -2196,21 +2322,25 @@ Per configurare correttamente un host TCP/IP sono necessari:
 ### Best Practices Configurazione
 
 **Documentazione:**
+
 - Piano di indirizzamento IP completo
 - Diagramma topologia di rete
 - Tabelle di assegnazione subnet
 
 **Sicurezza:**
+
 - Utilizzo indirizzi privati (RFC 1918)
 - NAT per accesso Internet
 - Firewall ai confini di rete
 
 **Ridondanza:**
+
 - Server DNS multipli
 - Gateway ridondanti (VRRP/HSRP)
 - Link backup per connettività critica
 
 **Monitoraggio:**
+
 - SNMP per dispositivi di rete
 - Logging centralizzato
 - Alerting automatico per problemi
@@ -2220,13 +2350,374 @@ Per configurare correttamente un host TCP/IP sono necessari:
 # Da qui in poi è da far riformattare a claude <3
 
 ---
-# PDF_4
-## Internet Deamon 
 
+# PDF_4
+
+## Internet Deamon
+
+Acuni daemon di protocolli tipo routed e named per Routing Information protocol (RIP) e per il DNS vengono fatti partire con li boot del sistema. Altri vengono fatti partire individualmente e attaivati da un super daemon chiamato internet daemon, **inetd**.
+Analizza le richieste e fa partire i giusti daemon.
+Parte da un file come /etc/rc, legge /etc/inetd.conf con i nomi dei daemon da fare partire.
+Un definizione del file di conf contiene:
+
+- name => nome del servizion
+- type => tipo di servizione usato:
+  - stream => TCP byte stream
+  - dgram => sevizio UDP
+  - raw => servizio datagram ip
+- protoloc => nome del protocollo (es TCP o UDP)
+- wait-satatus =>
+  - wait => deve apsettare che il server rilasci il socket
+  - non wait => può iniziare una nuova connessione su quel socket
+- uid => nome dell'utentza sotto cui gira il server
+- server => pathname del programma del server che inetd deve fare partire
+- arguments => lista argomenti da passare al programma server incovato
+
+## Architettura rete TCP/IP
+
+![alt text](images/tcpiparch.png)
+
+### Sotto l'ip
+
+TCP/IP non specifica i livelli 1 e 2 della rete ma usa quelli conformi agli standard. Su reti locali ad esempio opera su Ethernet/IEEE 802.3
+
+## Dispositivi e livelli OSI
+
+![alt text](images/dispositiviosi.png)
+
+### Repeater
+
+Opera a livello uno. Ripete solamente quello che gli arriva. Si usa quando vi è una limitazione fisica alla lungehzza della LAN.
+
+### Bridge
+
+Dispositivio a livello 2 OSI.
+Viene usato per creare una LAN estesa unendone 2.
+Ritrasmette selettivamente i paccheti alle LAN a cui è connesso.
+Ha prestazioni elevate e operando a livello due non si cura di cosa ci sia sulla LAN.
+Si dividono in:
+
+- Transparent bridge => collega 2 LAN Ethernet o IEEE 802.3
+- Source Routing Bridge => due LAN Token Ring
+- Translation Bridge => 2 lan di tipo diverso.
+  Fa due cose principali:
+- filtering => analizza le trame capendo a quale workstation sono indirizzate
+- forwarding => passa le trame indirizzate
+
+### Learning bridge
+
+Grazie all'adattatore su ogni dispositivo presente nelle LAN, i learning bridge "imparano" dove stanno le varie stazioni.
+Hanno dei limiti i bridge:
+
+- falliscono quando ci sono path multupli per collegare 2 LAN
+- Path multipli possono essere necessari per aumentare la sicurezza di una connessione.
+
+### Router e Bridge
+
+Opera a livello 3 OSI, instrada i pacchetti tra i vari modi e ammette più cammini.
+Collaborano tra di loro per trovare i cammini migliori.
+Il funzionamento è legato al tipo di protocollo usato.
+
+![alt text](images/routerebridge.png)
+
+### Brouter
+
+Un oggetto gender fluid tra Router per certi protocolli e Bridge per altri.
+
+### Router e Gateway
+
+Routing tra sottoreti è gestitio da IP router, chiamati erroneamente gateway. Gli IP gateway sono qualli che osi chiama router e i gateway OSI non hanno corrispettivo nel mondo TCP/IP.
+Effettuano instradamente sulla base delle tabelle indicate.
+
+### Gateway
+
+Dispositivo usato per connettere reti con architetture diverse. Converte i protocolli di una architettura in quelli di un'altra.
+
+## Protocolli
+
+### ICMP
+
+Progettato per riportare anomalie presenti nel routing dei paccheti IP e per verificare lo stato della rete.
+I vari codici sono:
+
+- 0 echo reply
+- 3 unreachabale
+- 4 source quence
+- 5 redirect
+- 8 echo request
+- 11 time exceeded
+- 12 parameter problem
+- 13 timestamp request
+- 14 timestamp replay
+- 15 information request
+- 16 information replay
+- 17 address mask request
+- 18 address mask request
+  Il redirect indica uno stimolo a prendre una route migliore.
+  I messaggi di mark sono stati introdotti per permettere ad una interfacia di capire la netmask usata da una rete.
+
+### ARP e RAPR
+
+Sono usati per scoprire in modo automatico le corrispondenze tra gli indirizzi di livello 3 e livello 2. Relazione tra IP e MAC.
+L'ARP viene usato per inviare un messaggio sulla stessa rete di cui conosce unicamente l'indirizzo a livello 3.
+Il RAPR viene usato nelle postazioni diskless per scoprire il loro indirizzo ip in fase di bootstrap.
+Operano solo su reti locali.
+
+### Autonomous System
+
+Il routing TCP/IP va su più livelli:
+primo livello locale, secondo livello tra le varie sottoreti gestito dall'ip router e un terzo gruppo raggruppa tutte le reti in Autonomous system, gruppi di reti controllate da un'unica autorità.
+Gli AS sono identificati da un numero intero univoco a livello globale assegnato da una unica autorità.
+I router che instradano all'interno dello stesso AS sono interior router, quelli che vanno anche all'esterno sono exterior router.
+I primi usano Interior Gateway Protoclo, i secondi Exterior.
+
+### Comando if config e configurare con questo
+
+Imposta o controlla i valori delle interfacce di rete.
+Identifica IP, MASK e BROADCAST.
+
+Una sintassi possibile per il comando ifconfig è:
+ifconfig interface address netmask mask broadcast address
+es: ifconfig le0 128.66.12.2 netmask 255.255.255.0 broadcast 128.66.12.255
+
+In cui gli argomenti sono:
+interface indica il nome dell’interfaccia da configurare
+address è l’indirizzo IP assegnato all’interfaccia: si può scrivere
+come indirizzo decimale separato da punti oppure come un host
+name. Se si usa l’host name occorre inserire l’host name e il suo IP
+address nel file /etc/hosts, perché il sistema deve essere in grado di
+risolvere i nomi anche senza DNS.
+netmask mask specifica la subnet mask per quella interfaccia.
+Il parametro è da impostare solo se si divide la rete in sottoreti. Se
+si stanno impostando le sottoreti occorre ricordare che tutti i
+sistemi della rete devono avere la stessa subnet mask.
+broadcast address specifica l’indirizzo di broadcast per la rete.
+In genere è quell’indirizzo della rete con impostati a 1 tutti i bit
+relativi all’host.
+
+### netstat
+
+Stato interfacce:
+
+> netstat -ain
+>
+> - -i interfacce configurate
+> - -a le interfacce prese in considerazione sono tutte
+> - -n output in forma numerica
+
+![alt text](images/netstat.png)
+![alt text](images/netsat2.png)
 
 # PDF_5
 
+### altri comandi ip, vediamo se metterli o meno
+
+[...]
+
+## Configurazione del routing approfondita
+
+#### E anche ripasso del routing
+
+- minimale => rete isolata da tutte le altre reti TCP/IP.
+- statico => per reti con numero limitato di gateway ad altre reti. Tabella costruita manualmetne
+- dinamico
+
+[...]
+
+### OSPF
+
+Sviluppato nel 1988 da IETF.
+diventato standard nel 1990 per routing in un AS.
+
+- è aperto
+- supporta subnet variabili
+- routing dinamico
+- routin in base al tipo di servizio
+- esegue il bilanciamento del carico
+- supporta sistemi gerarchici
+
+### EGP
+
+Exterior Gateway Protocol. Protocollo per scambio di informazioni all'interno di un AS.
+Messaggi come HELLO e IHEARDYOU sono messaggi utili per stabilire connessioni tra EGP.
+EGP può essere un processo separato usando EGP User Process oppure può girare come parte del Gateway Routing Daemon (gated)
+Sempre meglio usare gated.
+Quando un egpup parte, legge da un file di init o conf:
+
+- autonomoussystem asn => numero del as
+- egpneighbour neighbour => host name o ip che è il suo neighbout
+- egpmaxacquite number => numero massimo di vicini
+- net destination gateway address metric number => installa una stati route
+- egpnetsreachable net1... => definisce le reti che si consigliano come raggiungibili ai propri neighbour
+- defaultgateway address => install una default route di tipo active
+
+### BGP
+
+Border Gateway Protocol. Protocollo usato per la comunicazione tra AS.
+Si basa su un algoritmo vettore distanza e si occupa del transito di dati di terze parti su una certa rete. Le reti sono suddivise in:
+
+- reti sub => unica sessione al grafo BGP
+- reti multiconnesse => usata per il traffic in transito
+- reti di transito => spesso usate per il traffico da terze parti. In genere sono reti di tipo backbone
+
+### Gateway Routing Daemon
+
+E' un unico pacchetto che combina RIP, Hello, EGP e BGP.
+I suoi protocolli sono compoatibili con gli stessi protocolli forniti per le altre implementazioni.
+
 # PDF_6
 
+### Gateway Routing Daemon
+
+Gated elabora le informazioni date dai vari protocolli e seleziona la route migliore. Le varie route apprese da protocolli Interior vengono annunciate con protocolli exterior. La configurazione sta tutta in un file conf con un'unica sintassi. Esiste una tabella routing metric per decidere la bonta di una route per i varai protocolli. Quando viene comunicata una route, questa tabella viene usata. Al contrario quando riceve consigli da altri, questi vengono elaborati in base al protocolli e al valore di preference che gated ha.
+
+### Configurazione di gated
+
+La sintassi del file conf è simile a quella di C. Il file si divide in 4 sezioni
+
+- comandi di definizione
+- comandi di protocollo
+- comandi statici
+- comandi di controllo
+- comandi di direttive
+- comandi di trace
+
 # PDF_PARTE_FINALE
- 
+
+## DNS: BIND
+
+Sistema software client/server
+La parte client di BIND si chiama resolver e si occupa di gestire le query per le info ul domain name da inviare al server.
+La parte server è un demone chiamato named.
+
+### Configurazione BIND
+
+Resolver viene implementato come libreria. Alcuni sistemi possono usare solo un resolver senza girare il name server.
+In questi sistemi basta configurare un file resolv.conf. Questi sistemisono inusuali viste le limitazioni tecniche e vengono chiamati resolver-onyl-system.
+Le altre configurazioni riguardano solo il server e ci sono
+
+- Caching-Only => delegano il compito ad un altro server ma tengono una copia locale dei lookup
+- Authoritative Name Server => Hanno info su tutta la zona per rendere il servizio fault tolerance. Possono essrcene più di uno:
+  - primary master
+  - slave servers
+  - stealth server
+
+### Configurazionen del resolver
+
+Due modi
+
+- config di default => usa localhost come name server di default. Il domain name viene ricavato dalla stringa restituita dal comando hostname togliendo la parte prima del primo punto.
+  Hostname server per contraollare il nome di del localhost.
+- creare una configurazione personalizzata => offre il vantaggio di poter definire un server di backup da usare nel caso in cui il serever default non funzioni. I principali e universali due comandi usati dentro resolv.conf sono: - nameserver address => identifica tramim ip il server che il resolver contatterà per info sui domini. I server saranno contattai in ordine. - domain name => definisce nome del dominio di default.
+  [10,11 codice]
+
+### Configurazione di named
+
+named.conf è l'unico file di configurazione del demone named. Oltre alle ipostazioni del server contiene indicazioni sulle varie zone del dominio servito.
+I Zone Files hanno info sulla risoluzione di domini della rispettiva zona. Si creano dall'amministratore che può far mantenere la struttura gerarchica in base alle varie zone.
+
+#### File named.conf
+
+Il file di conf si scrive simile a C, con ; e commenti con #, // o /\*
+Le direttive principali sono:
+
+- acl acl-name {address_match_list}; => definisce liste di accesso.
+- include filename => include in quel punto un file
+- options => definisce impostazioni globali
+- Zone => opzioni per le zone servita indicando filedi database per risoluzione
+
+### Configurazione Name server caching-only
+
+[14-17 codice]
+
+### Standard Resource Records
+
+Formato standard per le informazioni dei domamin DB nei file di configurazione.
+Tipi di record:
+Start of Autority => SOA => Inizio di un dato di zone e parametri sotto ai quali sta l'intera zone
+Name Server => NS => nome del server di dominio
+Address => A => converte host name in indirizzo
+Pointer => PTR => indirizzo in hostname
+Mail Exchange MX => dove mandare la posta per un dato dominio
+Canonical Name => CNAME => alias host name
+Host info => HINFO => h.w. e s.o. di un host
+Well Known Service => WKS => Annunci di servizi di rete
+
+Struttura:
+[name] [ttl] IN type data
+name => dominio che referenzia il resource recordo
+ttl => time to live
+IN => definisce il record come un internet DNS resource record
+type => in base alla tabella sopra
+data => in base ad ogni tipo di record.
+[21-24 vari file + codice]
+
+#### Record Start of Autority
+
+[zone] [ttl] IN SOA origin contact (
+serial => numero versione del zone flie
+refresh => tempo di attesa del server secondario
+retry
+expire => quanto i dati devono essere convervati
+minimum => valore di default del campo ttl
+)
+
+zone rappresenta il nome del dominio dichiarato, origin host name del server, contact, indirizo email del responsabile del dominio.
+
+### Configurazione Authoritative-only name server
+
+[27-29 codici]
+
+### Map Files
+
+[30-32 codici]
+
+### File di Reverse domain
+
+Ha una struttura analoga al file named.local, entrambi convertono indirizzi ip in host name.
+I record PTR attuano questa conversione per gli host.
+Gli host ad esempio 15,16 e 17 della rete 202.18.4 saranno letti come 15.4.18.2929.in-addr.arpa.
+
+### Far partire named
+
+### nslookup
+
+Fa parte del pacchetto sw BIND. Sottopone query al name server. Interroga i vari db distribuiti nel sistema DNS. Si può usare per chiedere un IP di un host.
+Si può anche far partire in modo interattivo.
+Di base interrogra i record di tipo A ma con il parametro set type si indirizza la query anche agli altri tipi di record
+Il comando server permette di imposatre il server a cui fare le query. Una volta connessi a questi server si possono richiedere i zone fine con il comando ls e vederli con view.
+Set domain server per impostare il dominio di default per gli hostname specificati nelle query.
+[40-42 uso]
+
+## Servizi di rete
+
+Ci sono servizi come telnet e ftp che non richiedono configurazione.
+Altri servizi richiedono una appropiata configurazione e sono i segueti.
+
+### Comandi unix di tipo r
+
+- rlogin => remote login
+- rcp => remote copy, copia file da sistemi remoti.
+- rsh => remote shell, comandi inviati ad un terminale remoto
+  Nessuno comando di tipo r richiede il controllo della pswd. Si può eliminarne l'uso commentandoli nel file inetd.conf.
+  Si può però richiedere sempre la pswd cancellando il file host.equiv.
+  Se non si vuole richiedere la pswd, i comandi r si basano sul file trusted host e trusted user, chiamati anche equivalent host.
+  I file host.equiv e .rhosts definiscono trusted host/user per l'intero sistema e trusted host/user per una singola utentza.
+
+#### host.equiv
+
+[+|-][hostname][username] è il formato di base dei record. Ogni hostname è il nome di un trusetd. Lasciare il simbolo + senza niente significa "ogni host".
+Se viene specificato l'username, quell'utente non avrà la password richiesta.
+Se c'è il - verrà richiesta la pswd.
+
+#### .rhosts
+
+hostname username
+Contiene i record per la definizione di trusted host e user per una certa utenza.
+hostname è l'host fidato al quale ci si può connettere tramite l'utenza username senza controllo sulla pswd.
+In questo caso il singolo utente abilita l'accesso locale anche quando equiv non esiste.
+
+#### Accesso di root.
+
+L'utenza generica viene controllata su host.equiv poi .rhost
+L'utenza root solo su /.rhost
