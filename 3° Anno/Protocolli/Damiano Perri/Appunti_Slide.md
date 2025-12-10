@@ -77,14 +77,32 @@
   - [Configurazione Routing](#configurazione-del-routing)
   - [Definizione Sottoreti](#definizione-delle-sottoreti)
 - [PDF_4](#secondo-modulo---pdf_4)
-  - [Internet Daemon](#internet-deamon)
-  - [TCP/IP](#architettura-rete-tcpip)
-  - [Dispositivi OSI](#dispositivi-e-livelli-osi)
-  - [Protocolli](#protocolli)
+  - [Internet Daemon](#internet-daemon-inetd)
+  - [TCP/IP](#architettura-di-rete-tcpip)
+  - [Dispositivi OSI](#dispositivi-di-rete-e-livelli-osi)
+  - [Protocolli](#protocolli-di-supporto)
+  - [Autonomous System](#autonomous-system-as)
+  - [Configurazione Delle Interfacce di rete](#configurazione-delle-interfacce-di-rete)
 - [PDF_5](#secondo-modulo---pdf_5)
-  - [Configurazione routing APPROFONDITA] (#configurazione-del-routing-approfondita)
+  - [Comandi Avanzati ifconfig](#comandi-avanzati-di-ifconfig)
+  - [Configurazione avanzata del Routing](#configurazione-avanzata-del-routing)
+  - [Protocolli di Routing](#protocolli-di-routing)
 - [PDF_6](#secondo-modulo---pdf_6)
+   - [Gateway Routing Daemon](#gateway-routing-daemon-gated---approfondimento)
+   - [Gated Configurazione](#configurazione-di-gated)
 - [PDF_PARTE_FINALE](#secondo-modulo---pdf_parte_finale)
+   - [DNS: BIND](#dns-bind-berkeley-internet-name-domain)
+   - [Configurazione di BIND](#configurazione-di-bind)
+   - [Configurazione del Resolver](#configurazione-del-resolver-1)
+   - [Configurazione di Named](#configurazione-del-server-named)
+   - [Configurazione Name Sarver Caching-Only](#configurazione-name-server-caching-only)
+   - [Standard Resource Records](#standard-resource-records-rr)
+   - [Record Start of Authority (SOA)](#record-start-of-authority-soa)
+   - [Configurazione Authoritative Name Server](#configurazione-authoritative-name-server)
+   - [Map Files (Zone Files)](#map-files-zone-files)
+   - [File di Reverse Domain (Reverse DNS)](#file-di-reverse-domain-reverse-dns)
+   - [Servizi di rete UNIX](#servizi-di-rete-unix)
+   - [Riepilogo dei File di Configurazione](#riepilogo-dei-file-di-configurazione)
 
 ---
 
@@ -2345,379 +2363,1010 @@ Per configurare correttamente un host TCP/IP sono necessari:
 - Logging centralizzato
 - Alerting automatico per problemi
 
----
-
-# Da qui in poi è da far riformattare a claude <3
-
----
 
 # PDF_4
 
-## Internet Deamon
+## Internet Daemon (inetd)
 
-Acuni daemon di protocolli tipo routed e named per Routing Information protocol (RIP) e per il DNS vengono fatti partire con li boot del sistema. Altri vengono fatti partire individualmente e attaivati da un super daemon chiamato internet daemon, **inetd**.
-Analizza le richieste e fa partire i giusti daemon.
-Parte da un file come /etc/rc, legge /etc/inetd.conf con i nomi dei daemon da fare partire.
-Un definizione del file di conf contiene:
+Alcuni daemon di protocolli come `routed` e `named` (per Routing Information Protocol e DNS) vengono avviati automaticamente al boot del sistema. Altri servizi vengono gestiti da un **super daemon** chiamato **Internet Daemon (inetd)**.
 
-- name => nome del servizion
-- type => tipo di servizione usato:
-  - stream => TCP byte stream
-  - dgram => sevizio UDP
-  - raw => servizio datagram ip
-- protoloc => nome del protocollo (es TCP o UDP)
-- wait-satatus =>
-  - wait => deve apsettare che il server rilasci il socket
-  - non wait => può iniziare una nuova connessione su quel socket
-- uid => nome dell'utentza sotto cui gira il server
-- server => pathname del programma del server che inetd deve fare partire
-- arguments => lista argomenti da passare al programma server incovato
+### Funzionamento di inetd
 
-## Architettura rete TCP/IP
+inetd analizza le richieste in arrivo e avvia i daemon appropriati per ciascun servizio. Il suo processo di avvio prevede:
+
+1. Parte tramite uno script come `/etc/rc`
+2. Legge il file di configurazione `/etc/inetd.conf` che contiene l'elenco dei daemon da avviare
+
+### Struttura del file inetd.conf
+
+Ogni definizione nel file di configurazione contiene i seguenti campi:
+
+- **name** → Nome del servizio
+- **type** → Tipo di socket utilizzato:
+  - `stream` → TCP byte stream
+  - `dgram` → Servizio UDP
+  - `raw` → Servizio datagram IP
+- **protocol** → Nome del protocollo (es. TCP o UDP)
+- **wait-status** → Comportamento del socket:
+  - `wait` → Deve aspettare che il server rilasci il socket
+  - `nowait` → Può iniziare una nuova connessione su quel socket
+- **uid** → Nome dell'utenza sotto cui gira il server
+- **server** → Pathname del programma server che inetd deve avviare
+- **arguments** → Lista di argomenti da passare al programma server invocato
+
+---
+
+## Architettura di rete TCP/IP
 
 ![alt text](images/tcpiparch.png)
 
-### Sotto l'ip
+### Livelli inferiori all'IP
 
-TCP/IP non specifica i livelli 1 e 2 della rete ma usa quelli conformi agli standard. Su reti locali ad esempio opera su Ethernet/IEEE 802.3
+TCP/IP non specifica i livelli 1 e 2 del modello OSI, ma utilizza quelli conformi agli standard esistenti. Su reti locali, ad esempio, opera su Ethernet/IEEE 802.3.
 
-## Dispositivi e livelli OSI
+---
+
+## Dispositivi di rete e livelli OSI
 
 ![alt text](images/dispositiviosi.png)
 
-### Repeater
+### Repeater (Livello 1)
 
-Opera a livello uno. Ripete solamente quello che gli arriva. Si usa quando vi è una limitazione fisica alla lungehzza della LAN.
+Opera a **livello fisico** (livello 1 OSI). Ripete semplicemente il segnale che riceve senza alcuna elaborazione. Viene utilizzato quando vi sono limitazioni fisiche alla lunghezza della LAN, per estendere la portata del segnale.
 
-### Bridge
+### Bridge (Livello 2)
 
-Dispositivio a livello 2 OSI.
-Viene usato per creare una LAN estesa unendone 2.
-Ritrasmette selettivamente i paccheti alle LAN a cui è connesso.
-Ha prestazioni elevate e operando a livello due non si cura di cosa ci sia sulla LAN.
-Si dividono in:
+Dispositivo che opera a **livello data link** (livello 2 OSI).
 
-- Transparent bridge => collega 2 LAN Ethernet o IEEE 802.3
-- Source Routing Bridge => due LAN Token Ring
-- Translation Bridge => 2 lan di tipo diverso.
-  Fa due cose principali:
-- filtering => analizza le trame capendo a quale workstation sono indirizzate
-- forwarding => passa le trame indirizzate
+**Funzionalità principali:**
+- Crea una LAN estesa collegando due o più LAN
+- Ritrasmette selettivamente i pacchetti alle LAN a cui è connesso
+- Ha prestazioni elevate e, operando a livello 2, non si occupa dei protocolli di livello superiore
 
-### Learning bridge
+**Tipologie di bridge:**
+- **Transparent Bridge** → Collega 2 LAN Ethernet o IEEE 802.3
+- **Source Routing Bridge** → Collega 2 LAN Token Ring
+- **Translation Bridge** → Collega 2 LAN di tipo diverso
 
-Grazie all'adattatore su ogni dispositivo presente nelle LAN, i learning bridge "imparano" dove stanno le varie stazioni.
-Hanno dei limiti i bridge:
+**Operazioni principali:**
+1. **Filtering** → Analizza le trame identificando la workstation di destinazione
+2. **Forwarding** → Inoltra le trame indirizzate alla destinazione corretta
 
-- falliscono quando ci sono path multupli per collegare 2 LAN
-- Path multipli possono essere necessari per aumentare la sicurezza di una connessione.
+### Learning Bridge
 
-### Router e Bridge
+Grazie all'indirizzo MAC presente su ogni adattatore di rete, i learning bridge "imparano" automaticamente la posizione delle varie stazioni nella rete.
 
-Opera a livello 3 OSI, instrada i pacchetti tra i vari modi e ammette più cammini.
-Collaborano tra di loro per trovare i cammini migliori.
-Il funzionamento è legato al tipo di protocollo usato.
+**Limitazioni dei bridge:**
+- Falliscono quando esistono percorsi multipli per collegare 2 LAN (creano loop)
+- I percorsi multipli sono però necessari per aumentare l'affidabilità e la ridondanza della connessione
+
+### Router (Livello 3)
+
+Opera a **livello rete** (livello 3 OSI). Instrada i pacchetti tra le varie reti e supporta percorsi multipli.
+
+**Caratteristiche:**
+- Collaborano tra loro per trovare i percorsi migliori
+- Il funzionamento dipende dal protocollo di routing utilizzato
+- Più intelligenti dei bridge, ma con maggiore overhead
 
 ![alt text](images/routerebridge.png)
 
 ### Brouter
 
-Un oggetto gender fluid tra Router per certi protocolli e Bridge per altri.
+Dispositivo ibrido che si comporta come:
+- **Router** per certi protocolli
+- **Bridge** per altri protocolli
 
-### Router e Gateway
+### Router vs Gateway (Terminologia)
 
-Routing tra sottoreti è gestitio da IP router, chiamati erroneamente gateway. Gli IP gateway sono qualli che osi chiama router e i gateway OSI non hanno corrispettivo nel mondo TCP/IP.
-Effettuano instradamente sulla base delle tabelle indicate.
+**Importante:** Nel mondo TCP/IP esiste confusione terminologica:
+- I **router IP** vengono spesso chiamati erroneamente "gateway"
+- I veri **gateway** nel modello OSI non hanno un corrispettivo diretto in TCP/IP
+- I router IP effettuano l'instradamento basandosi sulle tabelle di routing
 
-### Gateway
+### Gateway (nel senso proprio)
 
-Dispositivo usato per connettere reti con architetture diverse. Converte i protocolli di una architettura in quelli di un'altra.
+Dispositivo utilizzato per connettere reti con **architetture completamente diverse**. Converte i protocolli di un'architettura in quelli di un'altra, operando potenzialmente a tutti i livelli OSI.
 
-## Protocolli
+---
 
-### ICMP
+## Protocolli di supporto
 
-Progettato per riportare anomalie presenti nel routing dei paccheti IP e per verificare lo stato della rete.
-I vari codici sono:
+### ICMP (Internet Control Message Protocol)
 
-- 0 echo reply
-- 3 unreachabale
-- 4 source quence
-- 5 redirect
-- 8 echo request
-- 11 time exceeded
-- 12 parameter problem
-- 13 timestamp request
-- 14 timestamp replay
-- 15 information request
-- 16 information replay
-- 17 address mask request
-- 18 address mask request
-  Il redirect indica uno stimolo a prendre una route migliore.
-  I messaggi di mark sono stati introdotti per permettere ad una interfacia di capire la netmask usata da una rete.
+Progettato per riportare anomalie nel routing dei pacchetti IP e per verificare lo stato della rete.
 
-### ARP e RAPR
+**Principali codici ICMP:**
+- **0** → Echo Reply
+- **3** → Destination Unreachable
+- **4** → Source Quench
+- **5** → Redirect
+- **8** → Echo Request
+- **11** → Time Exceeded
+- **12** → Parameter Problem
+- **13** → Timestamp Request
+- **14** → Timestamp Reply
+- **15** → Information Request
+- **16** → Information Reply
+- **17** → Address Mask Request
+- **18** → Address Mask Reply
 
-Sono usati per scoprire in modo automatico le corrispondenze tra gli indirizzi di livello 3 e livello 2. Relazione tra IP e MAC.
-L'ARP viene usato per inviare un messaggio sulla stessa rete di cui conosce unicamente l'indirizzo a livello 3.
-Il RAPR viene usato nelle postazioni diskless per scoprire il loro indirizzo ip in fase di bootstrap.
-Operano solo su reti locali.
+**Note importanti:**
+- Il messaggio **Redirect** indica al mittente di utilizzare una route migliore
+- I messaggi di **Address Mask** sono stati introdotti per permettere a un'interfaccia di scoprire automaticamente la netmask utilizzata dalla rete
 
-### Autonomous System
+### ARP e RARP
 
-Il routing TCP/IP va su più livelli:
-primo livello locale, secondo livello tra le varie sottoreti gestito dall'ip router e un terzo gruppo raggruppa tutte le reti in Autonomous system, gruppi di reti controllate da un'unica autorità.
-Gli AS sono identificati da un numero intero univoco a livello globale assegnato da una unica autorità.
-I router che instradano all'interno dello stesso AS sono interior router, quelli che vanno anche all'esterno sono exterior router.
-I primi usano Interior Gateway Protoclo, i secondi Exterior.
+Protocolli utilizzati per scoprire automaticamente le corrispondenze tra:
+- Indirizzi di **livello 3** (IP)
+- Indirizzi di **livello 2** (MAC address)
 
-### Comando if config e configurare con questo
+**ARP (Address Resolution Protocol):**
+- Utilizzato per inviare messaggi sulla stessa rete conoscendo solo l'indirizzo IP
+- Permette di scoprire il MAC address corrispondente a un IP
 
-Imposta o controlla i valori delle interfacce di rete.
-Identifica IP, MASK e BROADCAST.
+**RARP (Reverse ARP):**
+- Utilizzato dalle postazioni diskless per scoprire il proprio indirizzo IP durante il bootstrap
+- Opera al contrario dell'ARP: da MAC address a IP address
 
-Una sintassi possibile per il comando ifconfig è:
+**Limitazione:** Operano solo su reti locali (non attraversano i router).
+
+---
+
+## Autonomous System (AS)
+
+Il routing TCP/IP è organizzato gerarchicamente su più livelli:
+
+1. **Primo livello** → Routing locale all'interno della stessa rete
+2. **Secondo livello** → Routing tra sottoreti diverse, gestito dagli IP router
+3. **Terzo livello** → Raggruppa tutte le reti in **Autonomous System (AS)**, insiemi di reti controllate da un'unica autorità amministrativa
+
+### Caratteristiche degli AS
+
+- Identificati da un **numero intero univoco** a livello globale
+- Assegnato da un'autorità centrale
+- Permettono una gestione gerarchica del routing Internet
+
+### Tipologie di router
+
+**Interior Router:**
+- Instradano pacchetti all'interno dello stesso AS
+- Utilizzano **Interior Gateway Protocol (IGP)**
+
+**Exterior Router:**
+- Instradano pacchetti anche verso AS esterni
+- Utilizzano **Exterior Gateway Protocol (EGP)**
+
+---
+
+## Configurazione delle interfacce di rete
+
+### Comando ifconfig
+
+Imposta o controlla i valori delle interfacce di rete, identificando IP, netmask e broadcast address.
+
+**Sintassi:**
+```bash
 ifconfig interface address netmask mask broadcast address
-es: ifconfig le0 128.66.12.2 netmask 255.255.255.0 broadcast 128.66.12.255
+```
 
-In cui gli argomenti sono:
-interface indica il nome dell’interfaccia da configurare
-address è l’indirizzo IP assegnato all’interfaccia: si può scrivere
-come indirizzo decimale separato da punti oppure come un host
-name. Se si usa l’host name occorre inserire l’host name e il suo IP
-address nel file /etc/hosts, perché il sistema deve essere in grado di
-risolvere i nomi anche senza DNS.
-netmask mask specifica la subnet mask per quella interfaccia.
-Il parametro è da impostare solo se si divide la rete in sottoreti. Se
-si stanno impostando le sottoreti occorre ricordare che tutti i
-sistemi della rete devono avere la stessa subnet mask.
-broadcast address specifica l’indirizzo di broadcast per la rete.
-In genere è quell’indirizzo della rete con impostati a 1 tutti i bit
-relativi all’host.
+**Esempio pratico:**
+```bash
+ifconfig le0 128.66.12.2 netmask 255.255.255.0 broadcast 128.66.12.255
+```
 
-### netstat
+**Parametri:**
+- **interface** → Nome dell'interfaccia da configurare (es. `le0`, `eth0`)
+- **address** → Indirizzo IP assegnato all'interfaccia (formato decimale puntato o hostname)
+  - Se si usa un hostname, deve essere presente in `/etc/hosts` per la risoluzione locale
+- **netmask mask** → Subnet mask per l'interfaccia
+  - Da impostare solo se si divide la rete in sottoreti
+  - Tutti i sistemi della stessa rete devono avere la stessa subnet mask
+- **broadcast address** → Indirizzo di broadcast per la rete
+  - Generalmente è l'indirizzo della rete con tutti i bit dell'host impostati a 1
 
-Stato interfacce:
+---
 
-> netstat -ain
->
-> - -i interfacce configurate
-> - -a le interfacce prese in considerazione sono tutte
-> - -n output in forma numerica
+### Comando netstat
+
+Visualizza lo stato delle interfacce di rete e delle connessioni.
+
+**Sintassi per visualizzare le interfacce:**
+```bash
+netstat -ain
+```
+
+**Opzioni:**
+- **-i** → Mostra le interfacce configurate
+- **-a** → Considera tutte le interfacce
+- **-n** → Output in forma numerica (senza risoluzione DNS)
 
 ![alt text](images/netstat.png)
 ![alt text](images/netsat2.png)
 
+---
+
 # PDF_5
 
-### altri comandi ip, vediamo se metterli o meno
+## Comandi avanzati di ifconfig
 
-[...]
+### Impostare il Broadcast Address
 
-## Configurazione del routing approfondita
+```bash
+ifconfig le0 128.66.12.2 netmask 255.255.255.0 broadcast 128.66.12.255
+```
 
-#### E anche ripasso del routing
+Questo comando:
+- Definisce la rete locale come `128.66.12.0`
+- Imposta il broadcast a `128.66.12.255`
+- **Nota:** L'indirizzo `128.66.255.255` viene interpretato come host 255 della sottorete 255 della rete 128.66.0.0, NON come indirizzo di broadcast
 
-- minimale => rete isolata da tutte le altre reti TCP/IP.
-- statico => per reti con numero limitato di gateway ad altre reti. Tabella costruita manualmetne
-- dinamico
+### Assegnare un indirizzo a un'interfaccia
 
-[...]
+```bash
+ifconfig le0 128.66.12.2
+```
 
-### OSPF
+### Posizionamento dei comandi ifconfig
 
-Sviluppato nel 1988 da IETF.
-diventato standard nel 1990 per routing in un AS.
+I comandi ifconfig vengono eseguiti automaticamente in fase di boot:
 
-- è aperto
-- supporta subnet variabili
-- routing dinamico
-- routin in base al tipo di servizio
-- esegue il bilanciamento del carico
-- supporta sistemi gerarchici
+- **Unix BSD** → Script `/etc/rc.boot` o `/etc/rc.local`
+- **Unix System V** → Script `/etc/tcp` o `/etc/init.d/tcp`
 
-### EGP
+### Abilitare/Disabilitare interfacce (up/down)
 
-Exterior Gateway Protocol. Protocollo per scambio di informazioni all'interno di un AS.
-Messaggi come HELLO e IHEARDYOU sono messaggi utili per stabilire connessioni tra EGP.
-EGP può essere un processo separato usando EGP User Process oppure può girare come parte del Gateway Routing Daemon (gated)
-Sempre meglio usare gated.
-Quando un egpup parte, legge da un file di init o conf:
+```bash
+ifconfig le0 down           # Disabilita l'interfaccia
+ifconfig le0 129.66.1.2 up  # Riabilita l'interfaccia con nuovo IP
+```
 
-- autonomoussystem asn => numero del as
-- egpneighbour neighbour => host name o ip che è il suo neighbout
-- egpmaxacquite number => numero massimo di vicini
-- net destination gateway address metric number => installa una stati route
-- egpnetsreachable net1... => definisce le reti che si consigliano come raggiungibili ai propri neighbour
-- defaultgateway address => install una default route di tipo active
+### Opzioni ARP e Trailer (solo Ethernet)
 
-### BGP
+Queste opzioni si usano solo per interfacce di tipo Ethernet.
 
-Border Gateway Protocol. Protocollo usato per la comunicazione tra AS.
-Si basa su un algoritmo vettore distanza e si occupa del transito di dati di terze parti su una certa rete. Le reti sono suddivise in:
+**Trailer:**
+- Abilita o disabilita la modalità **trailer encapsulation** dei pacchetti IP
+- Permette di ridurre le copie memory-to-memory richieste dal sistema ricevente
+- Poco utilizzata nelle reti moderne
 
-- reti sub => unica sessione al grafo BGP
-- reti multiconnesse => usata per il traffic in transito
-- reti di transito => spesso usate per il traffico da terze parti. In genere sono reti di tipo backbone
+**ARP:**
+- Abilita o disabilita la mappatura automatica degli indirizzi IP con gli indirizzi fisici Ethernet
+- Normalmente lasciata abilitata
 
-### Gateway Routing Daemon
+### Opzione metric
 
-E' un unico pacchetto che combina RIP, Hello, EGP e BGP.
-I suoi protocolli sono compoatibili con gli stessi protocolli forniti per le altre implementazioni.
+Si utilizza solo in sistemi Unix che usano **RIP (Routing Information Protocol)**.
+
+RIP distribuisce automaticamente informazioni di routing agli altri host e costruisce dinamicamente le tabelle di routing. Le scelte di instradamento vengono prese in base al **costo di routing (metric)**.
+
+**Impostare il metric di un'interfaccia:**
+```bash
+ifconfig le0 26.104.0.19 metric 3
+```
+
+**Quando usarlo:**
+- Si utilizza preferibilmente quando esiste un'altra route alternativa e si vuole favorire una come primaria
+- Valori di metric più bassi indicano route preferibili
+
+---
+
+## Configurazione avanzata del Routing
+
+### Tipologie di routing
+
+1. **Routing minimale** → Rete isolata da tutte le altre reti TCP/IP
+2. **Routing statico** → Per reti con numero limitato di gateway. Tabella costruita manualmente
+3. **Routing dinamico** → Cambia automaticamente in base alle condizioni della rete. I router si scambiano informazioni e aggiustano le tabelle dinamicamente
+
+---
+
+### Routing Statico
+
+**Visualizzare la tabella di routing:**
+```bash
+netstat -rn
+```
+
+![alt text](images/tabella_routing_minima.png)
+
+**Interpretazione:**
+- **Prima riga** → Route di loopback verso localhost (127.0.0.1)
+- **Seconda riga** → Route verso la rete locale 128.66.12.0 sull'interfaccia le0
+
+**Limitazioni di questa tabella minima:**
+- Permette la comunicazione solo con host della rete locale
+- Non consente l'accesso a reti esterne
+
+### Comando route
+
+Aggiunge o rimuove voci nella tabella di routing.
+
+**Sintassi:**
+```bash
+route add <destinazione> <gateway> <metric>
+```
+
+**Esempio:**
+```bash
+# route add 26.0.0.0 128.66.12.1 1
+add net 26.0.0.0 gateway almond
+```
+
+**Parametri:**
+- **Primo argomento** → `add` o `delete`
+- **Secondo argomento** → Indirizzo di destinazione (rete o host)
+- **Terzo argomento** → Gateway (indirizzo di un gateway su una rete connessa direttamente)
+- **Quarto argomento** → Routing metric:
+  - `0` → Route locale
+  - `>0` → Route esterna
+
+![alt text](images/static_tabel_example.png)
+
+### Aggiungere la Default Route
+
+```bash
+# route -n add default 128.66.12.1
+add net default: gateway 128.66.12.1
+```
+
+![alt text](images/tabella_aggionrata_statica.png)
+
+**Vantaggi:**
+- Permette la comunicazione con qualsiasi host esterno
+- Funziona sia per Internet che per sottoreti locali (es. 128.66.1.3)
+
+**Ottimizzazione:**
+Per evitare ripetuti messaggi ICMP Redirect, è consigliabile specificare esplicitamente le route per ogni sottorete usando il comando `route`.
+
+**Persistenza:**
+I dati della tabella di routing vengono persi ad ogni reboot. Per renderli persistenti, inserire i comandi `route` nello script `/etc/rc.local`.
+
+---
+
+## Protocolli di Routing
+
+I router si dividono in due categorie principali:
+
+- **IGP (Interior Gateway Protocol)** → Instradano pacchetti internamente allo stesso AS
+- **EGP (Exterior Gateway Protocol)** → Scambiano messaggi anche tra AS diversi
+
+![alt text](images/routing_protocols.png)
+
+---
+
+### RIP (Routing Information Protocol)
+
+Protocollo di routing dinamico che utilizza il daemon `routed`.
+
+**Avvio del daemon:**
+```bash
+# routed
+```
+
+**Opzione `-q` (quiet mode):**
+```bash
+# routed -q
+```
+- Utilizzata quando il computer **non è un gateway**
+- Previene l'invio di informazioni di routing ad altri sistemi
+- Il sistema riceve solo le route consigliate da altri sistemi
+
+**Caratteristiche:**
+- Protocollo distance-vector
+- Usa il numero di hop come metrica
+- Limite massimo di 15 hop
+- Convergenza lenta
+
+---
+
+### OSPF (Open Shortest Path First)
+
+Sviluppato nel 1988 dall'IETF, è diventato standard nel 1990 per il routing all'interno di un AS.
+
+**Vantaggi principali:**
+- **Aperto** → Standard pubblico, non proprietario
+- **Supporta subnet variabili** → Classless routing (VLSM)
+- **Routing dinamico** → Si adatta rapidamente ai cambiamenti di topologia
+- **Routing basato sul tipo di servizio** → QoS
+- **Bilanciamento del carico** → Equal-cost multipath
+- **Supporta sistemi gerarchici** → Organizzazione in aree
+
+**Caratteristiche tecniche:**
+- Protocollo link-state
+- Convergenza rapida
+- Minore overhead di banda rispetto a RIP
+- Più complesso da configurare
+
+---
+
+### EGP (Exterior Gateway Protocol)
+
+Protocollo per lo scambio di informazioni di routing **tra** Autonomous System diversi.
+
+**Messaggi principali:**
+- **HELLO** e **I-HEARD-YOU** → Stabiliscono e mantengono connessioni tra router EGP
+
+**Implementazioni:**
+1. **EGP User Process (egpup)** → Processo separato
+2. **Gateway Routing Daemon (gated)** → Integrato nel daemon gated (**sempre preferibile**)
+
+### Configurazione EGP (egpup)
+
+Quando egpup viene avviato, legge un file di inizializzazione/configurazione con i seguenti parametri:
+
+- **autonomoussystem asn** → Numero dell'Autonomous System
+- **egpneighbour neighbour** → Hostname o IP del vicino EGP
+- **egpmaxacquire number** → Numero massimo di vicini
+- **net destination gateway address metric number** → Installa una route statica
+- **egpnetsreachable net1...** → Definisce le reti da annunciare come raggiungibili ai propri vicini
+- **defaultgateway address** → Installa una default route attiva
+
+---
+
+### BGP (Border Gateway Protocol)
+
+Protocollo moderno utilizzato per la comunicazione tra Autonomous System.
+
+**Caratteristiche:**
+- Basato su algoritmo **path-vector** (evoluzione del distance-vector)
+- Si occupa del transito di dati di terze parti attraverso una rete
+- Supporta routing basato su policy
+
+**Classificazione delle reti:**
+- **Reti stub** → Unica connessione al grafo BGP (reti "foglia")
+- **Reti multiconnesse** → Connessioni multiple ma **non** usate per traffico in transito
+- **Reti di transito** → Spesso usate per trasportare traffico di terze parti (tipicamente reti backbone)
+
+**Versioni:**
+- BGP-4 è la versione attuale e supporta CIDR (Classless Inter-Domain Routing)
+
+---
+
+### Gateway Routing Daemon (gated)
+
+**gated** è un pacchetto software unificato che combina:
+- RIP
+- Hello
+- EGP
+- BGP
+
+**Vantaggi:**
+- Compatibilità con le implementazioni standard di ciascun protocollo
+- Configurazione centralizzata in un unico file
+- Selezione intelligente delle route migliori
+
+**Funzionamento:**
+1. Elabora le informazioni ricevute dai vari protocolli di routing
+2. Seleziona la route migliore in base alle policy configurate
+3. Le route apprese tramite protocolli Interior vengono annunciate con protocolli Exterior
+
+**Tabelle di metriche:**
+- **Routing metric table** → Usata quando gated comunica route ad altri router
+- **Preference table** → Usata quando gated riceve consigli da altri router per decidere quali preferire
+
+---
 
 # PDF_6
 
-### Gateway Routing Daemon
+## Gateway Routing Daemon (gated) - Approfondimento
 
-Gated elabora le informazioni date dai vari protocolli e seleziona la route migliore. Le varie route apprese da protocolli Interior vengono annunciate con protocolli exterior. La configurazione sta tutta in un file conf con un'unica sintassi. Esiste una tabella routing metric per decidere la bonta di una route per i varai protocolli. Quando viene comunicata una route, questa tabella viene usata. Al contrario quando riceve consigli da altri, questi vengono elaborati in base al protocolli e al valore di preference che gated ha.
+### Logica di funzionamento
 
-### Configurazione di gated
+gated gestisce in modo intelligente le informazioni provenienti da diversi protocolli di routing:
 
-La sintassi del file conf è simile a quella di C. Il file si divide in 4 sezioni
+1. **Elaborazione** → Processa le informazioni ricevute dai vari protocolli
+2. **Selezione** → Sceglie la route migliore utilizzando le tabelle di metrica e preferenza
+3. **Annuncio** → Le route apprese tramite protocolli Interior (IGP) vengono redistribuite tramite protocolli Exterior (EGP)
 
-- comandi di definizione
-- comandi di protocollo
-- comandi statici
-- comandi di controllo
-- comandi di direttive
-- comandi di trace
+### Tabelle di decisione
+
+**Routing Metric Table:**
+- Utilizzata quando gated **comunica** una route ad altri router
+- Ogni protocollo ha valori di metrica specifici
+
+**Preference Table:**
+- Utilizzata quando gated **riceve** consigli da altri router
+- Determina quale protocollo è più affidabile/preferibile
+- Valori più bassi indicano maggiore preferenza
+
+---
+
+## Configurazione di gated
+
+La sintassi del file di configurazione di gated (`/etc/gated.conf`) è simile al linguaggio C.
+
+### Struttura del file di configurazione
+
+Il file si divide in **6 sezioni** principali:
+
+1. **Comandi di definizione** → Definiscono variabili e costanti
+2. **Comandi di protocollo** → Configurano i protocolli di routing (RIP, OSPF, BGP, ecc.)
+3. **Comandi statici** → Definiscono route statiche
+4. **Comandi di controllo** → Gestiscono import/export di route e policy di routing
+5. **Comandi di direttive** → Opzioni generali di comportamento
+6. **Comandi di trace** → Configurano il logging e il debugging
+
+**Sintassi:**
+- Simile al C: istruzioni terminate con `;`
+- Commenti supportati: `#`, `//`, `/* */`
+- Struttura a blocchi con parentesi graffe `{}`
+
+---
 
 # PDF_PARTE_FINALE
 
-## DNS: BIND
+## DNS: BIND (Berkeley Internet Name Domain)
 
-Sistema software client/server
-La parte client di BIND si chiama resolver e si occupa di gestire le query per le info ul domain name da inviare al server.
-La parte server è un demone chiamato named.
+BIND è un sistema software client/server per la risoluzione dei nomi di dominio.
 
-### Configurazione BIND
+### Componenti di BIND
 
-Resolver viene implementato come libreria. Alcuni sistemi possono usare solo un resolver senza girare il name server.
-In questi sistemi basta configurare un file resolv.conf. Questi sistemisono inusuali viste le limitazioni tecniche e vengono chiamati resolver-onyl-system.
-Le altre configurazioni riguardano solo il server e ci sono
+**Resolver (Client):**
+- Parte client di BIND
+- Gestisce le query per le informazioni sui domain name
+- Invia le richieste al server DNS
 
-- Caching-Only => delegano il compito ad un altro server ma tengono una copia locale dei lookup
-- Authoritative Name Server => Hanno info su tutta la zona per rendere il servizio fault tolerance. Possono essrcene più di uno:
-  - primary master
-  - slave servers
-  - stealth server
+**named (Server):**
+- Demone server di BIND
+- Risponde alle query DNS
+- Mantiene i database delle zone
 
-### Configurazionen del resolver
+---
 
-Due modi
+## Configurazione di BIND
 
-- config di default => usa localhost come name server di default. Il domain name viene ricavato dalla stringa restituita dal comando hostname togliendo la parte prima del primo punto.
-  Hostname server per contraollare il nome di del localhost.
-- creare una configurazione personalizzata => offre il vantaggio di poter definire un server di backup da usare nel caso in cui il serever default non funzioni. I principali e universali due comandi usati dentro resolv.conf sono: - nameserver address => identifica tramim ip il server che il resolver contatterà per info sui domini. I server saranno contattai in ordine. - domain name => definisce nome del dominio di default.
-  [10,11 codice]
+### Configurazione del Resolver
 
-### Configurazione di named
+Il resolver è implementato come **libreria di sistema**. Alcuni sistemi possono utilizzare solo il resolver senza eseguire un name server locale.
 
-named.conf è l'unico file di configurazione del demone named. Oltre alle ipostazioni del server contiene indicazioni sulle varie zone del dominio servito.
-I Zone Files hanno info sulla risoluzione di domini della rispettiva zona. Si creano dall'amministratore che può far mantenere la struttura gerarchica in base alle varie zone.
+#### Resolver-Only System
 
-#### File named.conf
+Sistemi che non eseguono il server DNS locale (configurazione inusuale a causa delle limitazioni tecniche).
 
-Il file di conf si scrive simile a C, con ; e commenti con #, // o /\*
-Le direttive principali sono:
+**Configurazione:** File `/etc/resolv.conf`
 
-- acl acl-name {address_match_list}; => definisce liste di accesso.
-- include filename => include in quel punto un file
-- options => definisce impostazioni globali
-- Zone => opzioni per le zone servita indicando filedi database per risoluzione
+#### Tipi di Name Server
 
-### Configurazione Name server caching-only
+**Caching-Only Server:**
+- Delega le query ad altri server
+- Mantiene una cache locale dei risultati (lookup recenti)
+- Riduce il traffico di rete e migliora le prestazioni
 
-[14-17 codice]
+**Authoritative Name Server:**
+- Contengono informazioni complete su una o più zone
+- Forniscono fault tolerance
+- Possono essere di tre tipi:
+  - **Primary Master** → Server principale con database master della zona
+  - **Slave Servers** → Server secondari che sincronizzano i dati dal master
+  - **Stealth Server** → Server autoritativi non elencati nei record NS della zona
 
-### Standard Resource Records
+---
 
-Formato standard per le informazioni dei domamin DB nei file di configurazione.
-Tipi di record:
-Start of Autority => SOA => Inizio di un dato di zone e parametri sotto ai quali sta l'intera zone
-Name Server => NS => nome del server di dominio
-Address => A => converte host name in indirizzo
-Pointer => PTR => indirizzo in hostname
-Mail Exchange MX => dove mandare la posta per un dato dominio
-Canonical Name => CNAME => alias host name
-Host info => HINFO => h.w. e s.o. di un host
-Well Known Service => WKS => Annunci di servizi di rete
+## Configurazione del Resolver
 
-Struttura:
+### Due modalità di configurazione
+
+#### 1. Configurazione di default
+
+- Utilizza `localhost` come name server predefinito
+- Il domain name viene ricavato dalla stringa restituita dal comando `hostname`, rimuovendo la parte prima del primo punto
+
+**Verifica hostname:**
+```bash
+hostname
+```
+
+#### 2. Configurazione personalizzata (consigliata)
+
+Creazione del file `/etc/resolv.conf` con configurazione personalizzata.
+
+**Vantaggi:**
+- Possibilità di definire server DNS di backup
+- Maggiore controllo sulla risoluzione dei nomi
+- Failover automatico in caso di problemi con il server primario
+
+### Comandi principali in resolv.conf
+
+**nameserver address:**
+```
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+```
+- Identifica tramite IP il server DNS da contattare
+- I server vengono contattati nell'ordine specificato
+- Si possono specificare fino a 3 nameserver
+
+**domain name:**
+```
+domain example.com
+```
+- Definisce il nome del dominio di default
+- Utilizzato per completare hostname non completi (FQDN)
+
+**Esempio completo:**
+```
+domain azienda.local
+nameserver 192.168.1.1
+nameserver 8.8.8.8
+```
+
+---
+
+## Configurazione del Server named
+
+### File named.conf
+
+`/etc/named.conf` è l'**unico file di configurazione** del demone named.
+
+**Contenuto:**
+- Impostazioni globali del server
+- Indicazioni sulle varie zone del dominio servito
+- Riferimenti ai Zone Files
+
+**Zone Files:**
+- Contengono informazioni per la risoluzione dei domini della rispettiva zona
+- Creati dall'amministratore
+- Permettono di mantenere una struttura gerarchica organizzata per zone
+
+---
+
+### Sintassi del file named.conf
+
+La sintassi è simile al linguaggio C:
+
+- Istruzioni terminate con `;`
+- Commenti con `#`, `//` o `/* */`
+- Struttura a blocchi con `{}`
+
+### Direttive principali
+
+**acl (Access Control List):**
+```
+acl acl-name {
+    address_match_list;
+};
+```
+- Definisce liste di controllo accesso
+- Utile per limitare query e trasferimenti di zona
+
+**include:**
+```
+include "/etc/named/zones.conf";
+```
+- Include il contenuto di un file esterno nel punto specificato
+- Utile per organizzare configurazioni complesse
+
+**options:**
+```
+options {
+    directory "/var/named";
+    forwarders { 8.8.8.8; };
+};
+```
+- Definisce impostazioni globali del server
+- Directory di lavoro, forwarders, cache, ecc.
+
+**zone:**
+```
+zone "example.com" {
+    type master;
+    file "example.com.zone";
+};
+```
+- Opzioni per le zone servite
+- Indica i file di database per la risoluzione
+- Specifica il tipo di zona (master, slave, hint)
+
+---
+
+## Configurazione Name Server Caching-Only
+
+Un server caching-only è la configurazione più semplice:
+- Non ha autorità su alcuna zona
+- Inoltra tutte le query ad altri server DNS
+- Mantiene una cache locale dei risultati
+
+**Vantaggi:**
+- Riduce il traffico di rete verso server esterni
+- Migliora i tempi di risposta per query ripetute
+- Facile da configurare e mantenere
+
+**Esempio di configurazione:** [Riferimento righe 14-17 del documento originale]
+
+---
+
+## Standard Resource Records (RR)
+
+Formato standard per le informazioni dei domini nei database DNS.
+
+### Tipi di Resource Record
+
+| Tipo | Nome completo | Descrizione |
+|------|---------------|-------------|
+| **SOA** | Start of Authority | Inizio di una zona e parametri che la governano |
+| **NS** | Name Server | Nome del server DNS autoritativo per il dominio |
+| **A** | Address | Converte hostname in indirizzo IPv4 |
+| **AAAA** | IPv6 Address | Converte hostname in indirizzo IPv6 |
+| **PTR** | Pointer | Converte indirizzo IP in hostname (reverse DNS) |
+| **MX** | Mail Exchange | Specifica dove indirizzare la posta per un dominio |
+| **CNAME** | Canonical Name | Alias per un hostname |
+| **HINFO** | Host Info | Hardware e sistema operativo di un host |
+| **WKS** | Well Known Service | Annunci di servizi di rete disponibili |
+
+---
+
+### Struttura generale dei Resource Record
+
+```
 [name] [ttl] IN type data
-name => dominio che referenzia il resource recordo
-ttl => time to live
-IN => definisce il record come un internet DNS resource record
-type => in base alla tabella sopra
-data => in base ad ogni tipo di record.
-[21-24 vari file + codice]
+```
 
-#### Record Start of Autority
+**Campi:**
+- **name** → Dominio a cui si riferisce il record (può essere omesso per usare il precedente)
+- **ttl** → Time To Live (secondi di validità della cache)
+- **IN** → Identifica il record come Internet DNS Resource Record
+- **type** → Tipo di record (vedi tabella sopra)
+- **data** → Dati specifici in base al tipo di record
 
+**Esempio:**
+```
+www     3600    IN  A       192.168.1.10
+mail    3600    IN  A       192.168.1.20
+@       3600    IN  MX  10  mail.example.com.
+```
+
+---
+
+## Record Start of Authority (SOA)
+
+Il record SOA definisce i parametri fondamentali di una zona DNS.
+
+### Sintassi
+
+```
 [zone] [ttl] IN SOA origin contact (
-serial => numero versione del zone flie
-refresh => tempo di attesa del server secondario
-retry
-expire => quanto i dati devono essere convervati
-minimum => valore di default del campo ttl
+    serial      ; Numero di versione del zone file
+    refresh     ; Tempo di attesa del server secondario prima del refresh
+    retry       ; Tempo di attesa prima di riprovare dopo un refresh fallito
+    expire      ; Tempo dopo il quale i dati non sono più validi
+    minimum     ; TTL di default per i record nella zona
 )
+```
 
-zone rappresenta il nome del dominio dichiarato, origin host name del server, contact, indirizo email del responsabile del dominio.
+**Parametri:**
+- **zone** → Nome del dominio dichiarato (spesso `@` per riferirsi al dominio corrente)
+- **origin** → Hostname del server DNS primario
+- **contact** → Indirizzo email del responsabile del dominio (il `@` è sostituito con `.`)
+- **serial** → Numero di versione del file (formato comune: YYYYMMDDNN)
+- **refresh** → Intervallo (in secondi) dopo il quale i server slave controllano aggiornamenti
+- **retry** → Intervallo (in secondi) di riprova in caso di fallimento del refresh
+- **expire** → Tempo (in secondi) dopo il quale i dati devono essere considerati obsoleti
+- **minimum** → TTL predefinito per tutti i record della zona
 
-### Configurazione Authoritative-only name server
+**Esempio pratico:**
+```
+@   IN  SOA ns1.example.com. admin.example.com. (
+            2024120901  ; Serial (YYYYMMDDNN)
+            3600        ; Refresh (1 ora)
+            1800        ; Retry (30 minuti)
+            604800      ; Expire (1 settimana)
+            86400       ; Minimum TTL (1 giorno)
+        )
+```
 
-[27-29 codici]
+---
 
-### Map Files
+## Configurazione Authoritative Name Server
 
-[30-32 codici]
+Un server DNS autoritativo contiene i dati master per una o più zone.
 
-### File di Reverse domain
+**Configurazione base:** [Riferimento righe 27-29 del documento originale]
 
-Ha una struttura analoga al file named.local, entrambi convertono indirizzi ip in host name.
-I record PTR attuano questa conversione per gli host.
-Gli host ad esempio 15,16 e 17 della rete 202.18.4 saranno letti come 15.4.18.2929.in-addr.arpa.
+**Componenti necessari:**
+1. File `named.conf` con definizione delle zone
+2. Zone file per ciascuna zona autoritativa
+3. File di reverse mapping (per conversione IP → hostname)
 
-### Far partire named
+---
 
-### nslookup
+## Map Files (Zone Files)
 
-Fa parte del pacchetto sw BIND. Sottopone query al name server. Interroga i vari db distribuiti nel sistema DNS. Si può usare per chiedere un IP di un host.
-Si può anche far partire in modo interattivo.
-Di base interrogra i record di tipo A ma con il parametro set type si indirizza la query anche agli altri tipi di record
-Il comando server permette di imposatre il server a cui fare le query. Una volta connessi a questi server si possono richiedere i zone fine con il comando ls e vederli con view.
-Set domain server per impostare il dominio di default per gli hostname specificati nelle query.
-[40-42 uso]
+I map files contengono i record DNS per una specifica zona.
 
-## Servizi di rete
+**Contenuto tipico:**
+- Record SOA
+- Record NS (name server)
+- Record A (indirizzi host)
+- Record MX (mail exchanger)
+- Record CNAME (alias)
+- Altri record specifici
 
-Ci sono servizi come telnet e ftp che non richiedono configurazione.
-Altri servizi richiedono una appropiata configurazione e sono i segueti.
+**Esempio:** [Riferimento righe 30-32 del documento originale]
 
-### Comandi unix di tipo r
+---
 
-- rlogin => remote login
-- rcp => remote copy, copia file da sistemi remoti.
-- rsh => remote shell, comandi inviati ad un terminale remoto
-  Nessuno comando di tipo r richiede il controllo della pswd. Si può eliminarne l'uso commentandoli nel file inetd.conf.
-  Si può però richiedere sempre la pswd cancellando il file host.equiv.
-  Se non si vuole richiedere la pswd, i comandi r si basano sul file trusted host e trusted user, chiamati anche equivalent host.
-  I file host.equiv e .rhosts definiscono trusted host/user per l'intero sistema e trusted host/user per una singola utentza.
+## File di Reverse Domain (Reverse DNS)
 
-#### host.equiv
+I file di reverse domain permettono la conversione inversa: da indirizzo IP a hostname.
 
-[+|-][hostname][username] è il formato di base dei record. Ogni hostname è il nome di un trusetd. Lasciare il simbolo + senza niente significa "ogni host".
-Se viene specificato l'username, quell'utente non avrà la password richiesta.
-Se c'è il - verrà richiesta la pswd.
+### Struttura
 
-#### .rhosts
+Ha una struttura analoga al file `named.local`, entrambi convertono indirizzi IP in hostname usando **record PTR**.
 
+### Dominio in-addr.arpa
+
+**Struttura analoga a `named.local`**, converte IP in hostname.
+
+**Esempio `192.168.1.rev`:**
+```
+$TTL 86400
+@   IN  SOA ns1.example.com. admin.example.com. (
+            2024121001 3600 900 604800 86400 )
+    IN  NS  ns1.example.com.
+
+10  IN  PTR ns1.example.com.
+11  IN  PTR ns2.example.com.
+20  IN  PTR mail.example.com.
+30  IN  PTR www.example.com.
+```
+
+**Nota:** Gli indirizzi sono scritti al contrario:
+- Host `192.168.1.15` diventa `15.1.168.192.in-addr.arpa`
+
+### Comando `nslookup`
+
+**Uso base:**
+```bash
+nslookup hostname              # Query semplice
+nslookup hostname dns-server   # Query a server specifico
+```
+
+**Modalità interattiva:**
+```bash
+nslookup
+> server 8.8.8.8               # Imposta server
+> set type=MX                  # Tipo di record
+> example.com                  # Esegui query
+> set domain=example.com       # Dominio di default
+> ls example.com               # Elenca zona (se permesso)
+> view filename                # Visualizza file
+> exit
+```
+
+**Tipi di query:**
+```bash
+set type=A        # Address record (default)
+set type=NS       # Name server
+set type=MX       # Mail exchange
+set type=CNAME    # Canonical name
+set type=SOA      # Start of authority
+set type=ANY      # Tutti i record
+```
+
+---
+
+## Servizi di Rete Unix
+
+### Servizi senza configurazione
+
+Alcuni servizi funzionano immediatamente:
+- **telnet:** Login remoto
+- **ftp:** Trasferimento file
+
+### Comandi "r" (Remote Commands)
+
+**Suite di comandi:**
+- `rlogin`: Remote login
+- `rcp`: Remote copy (copia file)
+- `rsh`: Remote shell (esecuzione comandi)
+
+**Caratteristica principale:** Possono operare **senza richiesta password** se configurati correttamente.
+
+#### Disabilitare i comandi r
+
+**Metodo 1 - Commentare in `/etc/inetd.conf`:**
+```bash
+#login  stream  tcp  nowait  root  /usr/sbin/in.rlogind  in.rlogind
+#shell  stream  tcp  nowait  root  /usr/sbin/in.rshd     in.rshd
+```
+
+**Metodo 2 - Richiedere sempre password:**
+Cancellare il file `/etc/hosts.equiv`
+
+### Concetti di Trusted Host e User
+
+**Terminologia:**
+- **Trusted Host:** Host considerati sicuri
+- **Trusted User:** Utenti che possono accedere senza password
+- **Equivalent Host:** Sinonimo di trusted host
+
+**File di configurazione:**
+1. `/etc/hosts.equiv`: Sistema globale
+2. `~/.rhosts`: Per singolo utente
+
+#### File `/etc/hosts.equiv`
+
+**Sintassi:**
+```
+[+|-][hostname] [username]
+```
+
+**Esempi:**
+```bash
+server1.example.com           # Tutti gli utenti di server1 sono trusted
+server2.example.com bob       # Solo bob di server2 è trusted
++ alice                       # alice da qualsiasi host è trusted
+-badhost.example.com          # badhost sempre richiede password
++                             # PERICOLOSO: tutti gli host trusted
+```
+
+**Simboli:**
+- `+` da solo = qualsiasi host (sconsigliato per sicurezza)
+- `-` = forza richiesta password
+- Specificare username = solo quell'utente è trusted
+
+#### File `~/.rhosts`
+
+**Sintassi:**
+```
 hostname username
-Contiene i record per la definizione di trusted host e user per una certa utenza.
-hostname è l'host fidato al quale ci si può connettere tramite l'utenza username senza controllo sulla pswd.
-In questo caso il singolo utente abilita l'accesso locale anche quando equiv non esiste.
+```
 
-#### Accesso di root.
+**Esempio:**
+```bash
+server1.example.com alice
+workstation.local bob
+```
 
-L'utenza generica viene controllata su host.equiv poi .rhost
-L'utenza root solo su /.rhost
+**Significato:**
+- L'utente locale può essere accessibile da `alice@server1.example.com` e `bob@workstation.local` senza password
+- Permette accesso anche quando `/etc/hosts.equiv` non esiste
+
+### Accesso di root
+
+**Regole speciali per root:**
+
+| Utente | Controlla `/etc/hosts.equiv` | Controlla `~/.rhosts` |
+|--------|------------------------------|----------------------|
+| Normale | ✓ Sì | ✓ Sì |
+| root | ✗ No | ✓ Sì (solo `/.rhosts`) |
+
+**Sicurezza:** Root viene controllato solo tramite `/.rhosts` per maggiore sicurezza, ignorando `/etc/hosts.equiv`.
+
+---
+
+## Riepilogo dei File di Configurazione
+
+| File | Scopo |
+|------|-------|
+| `/etc/inetd.conf` | Configurazione super daemon |
+| `/etc/hosts` | Risoluzione statica hostname |
+| `/etc/resolv.conf` | Configurazione DNS resolver |
+| `/etc/named.conf` | Configurazione server DNS |
+| `/etc/rc.local` | Script avvio sistema (BSD) |
+| `/etc/init.d/tcp` | Script avvio rete (System V) |
+| `/etc/hosts.equiv` | Trusted host globali |
+| `~/.rhosts` | Trusted host per utente |
+
+---
+
+## Best Practices
+
+### Sicurezza
+1. **Non usare `+` in `hosts.equiv`** (apre a tutti gli host)
+2. **Limitare permessi `.rhosts`:** `chmod 600 ~/.rhosts`
+3. **Evitare comandi r se possibile:** Preferire SSH
+4. **Usare firewall** per limitare accesso ai servizi
+
+### DNS
+1. **Incrementare serial** ad ogni modifica zone file
+2. **Usare slave server** per ridondanza
+3. **Configurare reverse DNS** per tutti gli host
+4. **Monitorare log named** per errori
+
+### Routing
+1. **Documentare route statiche** in `/etc/rc.local`
+2. **Usare routing dinamico** su reti complesse
+3. **Verificare tabelle routing:** `netstat -rn`
+4. **Monitorare ICMP redirect** per trovare errori configurazione
